@@ -1,0 +1,59 @@
+// 测试sqlserver连接信息
+User: db356335
+IP: 10.102.2.34
+Schema: a3563m116\ASRS
+Pwd: 6UfDJB1FqjnWNFHF
+// sqlserver连接信息
+db356320
+FJg6Chy90CaOMpbL
+10.102.1.63
+ASRS
+
+// 连接sqlserver
+登录堡垒机，堡垒机windows系统有防火墙，无法连接，只能通过服务器连接
+服务器上使用docker启动微软的sqlcmd镜像，进行连接
+
+// 启动进入docker容器
+docker run -it mcr.microsoft.com/mssql-tools
+
+// 连接sqlserver中间表数据库
+sqlcmd -S 10.102.1.63 -U db356335 -P YCMuepzio8OXZmIE
+
+// 查看所有库
+USE master
+go
+EXEC sp_helpdb
+go
+
+// 切换AGV调度库
+use ASRS
+go
+
+
+// 查看所有表
+select * from sys.tables
+
+// 出库
+select TaskNo, PartNo, TaskType, BinCode, Flag  from MOULD_Pd_WMS_Request order by CreateTime
+
+// 出库
+SELECT count(*) FROM MOULD_Pd_WMS_Request WHERE TaskNo = 'CYLK_ASRS2PD_20221129114723_884a34c16f' and TaskType = 2
+SELECT count(*) FROM MOULD_WMS_ASRS_Request WHERE TaskNo = 'CYLK_ASRS2PD_20221129114723_884a34c16f' and TaskType = 2
+SELECT count(*) FROM MOULD_ASRS_WMS_CallBack WHERE TaskNo = 'CYLK_ASRS2PD_20221129114723_884a34c16f' and TaskType = 2
+
+// 任务流转表
+mysql> select job_id, flow_order, type, agv, rfid, mold_code, flag from mold_inout_bound_task_flow where task_no='CYLK_ASRS2PD_20221129114723_884a34c16f';
+
+
+// 查询出库发起记录
+select top 1 TaskId,TaskNo,TaskType,BInCode from CY_WMS_REQUEST order by createtime desc
+
+// 产线通知WMS
+select * from CY_WMS_REQUEST where TaskNo = 'GTS2CSGTS2AGV03345620220720175652' order by createtime desc
+
+// WMS通知立库
+select * from WMS_LM_Request where TaskNo = 'GTS2CSGTS2AGV03345620220720175652'
+                                 CYLK_CS-ASRS-IN-100_20220915153908_7bc72e0a34
+
+// 立库通知WMS
+select * from LM_WMS_CallBack where TaskNo = 'GTS2CSGTS2AGV03345620220720175652'

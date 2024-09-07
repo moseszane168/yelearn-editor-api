@@ -1,0 +1,41 @@
+PUT crf-mold
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "html_filter": {
+          "tokenizer": "standard"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text",
+        "analyzer": "standard", 
+        "search_analyzer": "standard"
+      },
+      "content": {
+        "type": "text",
+        "analyzer": "standard", 
+        "search_analyzer": "standard"
+      },
+      "group": {
+        "type": "text",
+        "analyzer": "standard", 
+        "search_analyzer": "standard"
+      },
+      "createdBy": {
+        "type": "text",
+        "analyzer": "standard", 
+        "search_analyzer": "standard"
+      },
+      "gmtCreated": {
+        "type": "text",
+        "analyzer": "standard", 
+        "search_analyzer": "standard"
+      }
+    }
+  }
+}

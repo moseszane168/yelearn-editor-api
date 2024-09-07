@@ -1,0 +1,8174 @@
+definitions:
+  AddMoldMaintenanceTaskVO:
+    properties:
+      approvalId:
+        description: 审核人ID
+        type: string
+      isApproval:
+        description: 是否需审批：0-需 1-无需
+        type: integer
+      moldId:
+        description: 模具ID
+        type: integer
+      moldType:
+        description: 模具类型 chongkong-冲孔，chengxing-成型
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      timeoutHours:
+        description: 任务超时时间(小时)
+        type: integer
+    required:
+    - moldId
+    - moldType
+    type: object
+  AgvTaskScopeVO:
+    properties:
+      x:
+        description: x轴
+        items:
+          $ref: '#/definitions/scopestatistics.X'
+        type: array
+      "y":
+        description: Y轴
+        items:
+          type: integer
+        type: array
+    type: object
+  AgvTaskVO:
+    properties:
+      type:
+        description: 统计类型
+        type: string
+    type: object
+  BomImportParsedVOS:
+    properties:
+      data:
+        description: 导入数据
+        items:
+          $ref: '#/definitions/BomImportVO'
+        type: array
+      standard:
+        description: 是否标准件
+        type: string
+    type: object
+  BomImportVO:
+    properties:
+      assemblyRelation:
+        description: 装配关系
+        type: string
+      count:
+        description: 数量
+        type: integer
+      flavor:
+        description: 规格
+        type: string
+      heatTreating:
+        description: 热处理
+        type: string
+      material:
+        description: 材料
+        type: string
+      moldCode:
+        description: 模具编号
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      partName:
+        description: 零件名称
+        type: string
+      remark:
+        description: 备注
+        type: string
+      standard:
+        description: 标准
+        type: string
+    required:
+    - count
+    - flavor
+    - moldCode
+    - partCode
+    - partName
+    type: object
+  CancelJobVO:
+    properties:
+      jobID:
+        description: 任务ID
+        type: integer
+    type: object
+  CreateBomVO:
+    properties:
+      assemblyRelation:
+        description: 装配关系
+        type: string
+      count:
+        description: 数量
+        type: integer
+      flavor:
+        description: 规格
+        type: string
+      heatTreating:
+        description: 热处理
+        type: string
+      material:
+        description: 材料
+        type: string
+      moldCode:
+        description: 模具编号
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      partName:
+        description: 零件名称
+        type: string
+      remark:
+        description: 备注
+        type: string
+      standard:
+        description: 标准
+        type: string
+      standardComponent:
+        description: 标准件:Y 非标准件：N
+        type: string
+    type: object
+  CreateDictGroupVO:
+    properties:
+      code:
+        description: 组code，全局唯一
+        type: string
+      name:
+        description: 组名称，全局唯一
+        type: string
+    required:
+    - code
+    - name
+    type: object
+  CreateDictPropertyVO:
+    properties:
+      groupCode:
+        description: 字典组Code
+        type: string
+      key:
+        description: 字典key,全局唯一
+        type: string
+      order:
+        description: 排序
+        type: integer
+      valueCn:
+        description: 字典值，中文
+        type: string
+      valueEn:
+        description: 字典值，英文
+        type: string
+    required:
+    - groupCode
+    - key
+    type: object
+  CreateMoldKnowledgeVO:
+    properties:
+      content:
+        description: 知识库内容
+        type: string
+      files:
+        description: 上传保存文件
+        items:
+          $ref: '#/definitions/base.FileStruct'
+        type: array
+      group:
+        description: 知识库组
+        type: string
+      name:
+        description: 知识库名称
+        type: string
+      style:
+        description: 书皮样式
+        type: string
+    required:
+    - content
+    - group
+    - name
+    - style
+    type: object
+  CreateMoldMaintenancePlanVO:
+    properties:
+      moldIds:
+        description: 计时类型计划关联的模具ID列表
+        items:
+          type: integer
+        type: array
+      moldType:
+        description: 模具类型
+        type: string
+      name:
+        description: 模具保养计划名称
+        type: string
+      operate:
+        description: 任务生成区间最小值操作符：小于等于lte、小于lt、等于ge
+        type: string
+      planCron:
+        description: 计时cron表达式
+        type: string
+      planType:
+        description: 模具保养计划类型:timing-计时; metering-计量
+        type: string
+      taskEnd:
+        description: 任务生成区间最大值，大于
+        type: integer
+      taskStandard:
+        description: 任务生成标准值，只做显示用
+        type: integer
+      taskStart:
+        description: 任务生成区间最小值
+        type: integer
+      timeoutHours:
+        description: 计时类型计划超时时间(小时)
+        type: integer
+    required:
+    - name
+    - planType
+    type: object
+  CreateMoldMaintenanceStandardVO:
+    properties:
+      code:
+        description: 标准编号
+        type: string
+      content:
+        description: 保养标准内容
+        items:
+          $ref: '#/definitions/MaintenanceStandardContentVO'
+        type: array
+      level:
+        description: 保养级别
+        type: string
+      moldIds:
+        description: 关联模具，only 专用标准
+        items:
+          type: integer
+        type: array
+      name:
+        description: 保养名称
+        type: string
+      standardType:
+        description: 标准类型
+        type: string
+      time:
+        description: 创建时间
+        type: string
+      type:
+        description: 模具类型
+        type: string
+      version:
+        description: 版本
+        type: string
+    required:
+    - code
+    - level
+    - name
+    - standardType
+    - time
+    - type
+    - version
+    type: object
+  CreateMoldVO:
+    properties:
+      category:
+        description: 模具类别
+        type: string
+      clientName:
+        description: 客户名称
+        type: string
+      code:
+        description: 模具编号
+        type: string
+      customs:
+        description: 自定义参数
+        items:
+          $ref: '#/definitions/MoldCustomVO'
+        type: array
+      firstUseDate:
+        description: 第一次使用日期
+        type: string
+      lineLevel:
+        description: 使用线别
+        type: string
+      makeDate:
+        description: 制造日期
+        type: string
+      name:
+        description: 模具名称
+        type: string
+      partCodes:
+        description: 模具零件号
+        items:
+          type: string
+        type: array
+      platform:
+        description: 平台
+        type: string
+      process:
+        description: 工序
+        type: string
+      projectName:
+        description: 项目名称
+        type: string
+      propertyNumber:
+        description: 资产编号
+        type: string
+      provide:
+        description: 模具供应商
+        type: string
+      rfid:
+        description: RFID
+        type: string
+      sizeHeigh:
+        description: 模具高
+        type: number
+      sizeLong:
+        description: 模具长
+        type: number
+      sizeWidth:
+        description: 模具宽
+        type: number
+      status:
+        description: 模具状态
+        type: string
+      type:
+        description: 模具类型
+        type: string
+      weight:
+        description: 模具重量
+        type: number
+      yearLimit:
+        description: 使用年限
+        type: number
+    required:
+    - code
+    - lineLevel
+    - name
+    - platform
+    - process
+    - provide
+    - sizeHeigh
+    - sizeLong
+    - sizeWidth
+    - status
+    - type
+    type: object
+  CreateMoldingParamsCustomsVO:
+    properties:
+      customs:
+        description: 数据
+        items:
+          $ref: '#/definitions/MoldCustomVO'
+        type: array
+      moldCode:
+        description: 模具编码
+        type: string
+    type: object
+  CreateQualityVO:
+    properties:
+      defectCount:
+        description: 不良数量
+        type: integer
+      defectDesc:
+        description: 不良描述
+        type: string
+      lineLevel:
+        description: 线别
+        type: string
+      moldId:
+        description: 模具ID
+        type: integer
+      orderCode:
+        description: 工单号
+        type: string
+      productionCount:
+        description: 生产数量
+        type: integer
+      qualityContent:
+        description: 质量内容
+        type: string
+    type: object
+  CreateRemodelVO:
+    properties:
+      content:
+        description: 改造内容
+        maxLength: 100
+        type: string
+      director:
+        description: 责任人
+        type: string
+      location:
+        description: 改造地点
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      remodelEndTime:
+        description: 改造结束时间
+        type: string
+      remodelStartTime:
+        description: 改造开始时间
+        type: string
+      type:
+        description: 改造类别
+        type: string
+    required:
+    - director
+    - location
+    - moldCode
+    - remodelEndTime
+    - remodelStartTime
+    - type
+    type: object
+  CreateRepairVO:
+    properties:
+      arriveTime:
+        description: 到达时间开始
+        type: string
+      auditorEngine:
+        description: 审核-维修工程师
+        type: string
+      auditorProduct:
+        description: 审核-生产组长
+        type: string
+      confirmor:
+        description: 确定人
+        type: string
+      faultDesc:
+        description: 故障描述
+        type: string
+      finishTime:
+        description: 完成时间开始
+        type: string
+      improveContent:
+        description: 永久改善内容
+        type: string
+      lastTime:
+        description: 维修时长(分钟)
+        minimum: 0
+        type: integer
+      lineLevel:
+        description: 线别
+        type: string
+      lockor:
+        description: 锁定人
+        type: string
+      moldCode:
+        description: 模具编号
+        type: string
+      operator:
+        description: 操作者
+        type: string
+      repairContent:
+        description: 维修内容
+        type: string
+      repairLevel:
+        description: 维修等级
+        type: string
+      repairSpares:
+        description: 维修备件更换
+        items:
+          $ref: '#/definitions/RepairSpare'
+        type: array
+      repairStations:
+        description: 维修工站
+        items:
+          type: string
+        type: array
+      repairtor:
+        description: 维修者
+        type: string
+      reportTime:
+        description: 报告时间开始
+        type: string
+      unlockor:
+        description: 解锁人
+        type: string
+    type: object
+  CreateSpareVO:
+    properties:
+      code:
+        description: 备件编号
+        type: string
+      flavor:
+        description: 备件规格
+        type: string
+      material:
+        description: 材质
+        type: string
+      name:
+        description: 备件名称
+        type: string
+    required:
+    - code
+    type: object
+  CreateUserVO:
+    properties:
+      department:
+        description: 部门
+        type: string
+      loginName:
+        description: 工号
+        type: string
+      name:
+        description: 姓名
+        type: string
+      password:
+        description: 密码，rsa加密
+        type: string
+    required:
+    - department
+    - loginName
+    - name
+    - password
+    type: object
+  CronExpressionVo:
+    properties:
+      cronExpression:
+        description: Cron表达式
+        type: string
+    type: object
+  DeleteVO:
+    properties:
+      ids:
+        items:
+          type: integer
+        minItems: 1
+        type: array
+    type: object
+  EmailGetVO:
+    properties:
+      maintenanceReceives:
+        description: 保养超时邮件发送人
+        type: string
+      remodelReceives:
+        description: 模具改造邮件发送人
+        type: string
+    type: object
+  EmailSetVO:
+    properties:
+      receives:
+        description: 邮件接收人，使用逗号分隔
+        type: string
+      type:
+        description: 类型：maintenance保养超时邮件发送/remodel模具改造邮件发送
+        type: string
+    type: object
+  EncryptPassWordVO:
+    properties:
+      plaintext:
+        description: 明文密码
+        type: string
+    required:
+    - plaintext
+    type: object
+  FileOutVO:
+    properties:
+      bucketName:
+        type: string
+      fileKey:
+        type: string
+      fileName:
+        type: string
+    type: object
+  FixMaintenanceTaskRequestVO:
+    properties:
+      moldType:
+        description: 模具类型(chongkong/chengxing)
+        type: string
+    required:
+    - moldType
+    type: object
+  IDSVO:
+    properties:
+      ids:
+        items:
+          type: integer
+        type: array
+    type: object
+  IDVO:
+    properties:
+      id:
+        type: integer
+    type: object
+  InOutBoundTaskOutVO:
+    properties:
+      count:
+        type: integer
+      date:
+        type: string
+    type: object
+  InOutBoundTaskVO:
+    properties:
+      endDate:
+        description: 结束日期
+        type: string
+      platform:
+        description: 平台; 不传或为空-全部平台
+        type: string
+      startDate:
+        description: 开始日期
+        type: string
+      status:
+        description: 任务状态, complete-成功；failure-失败; 不传或为空-全部状态
+        type: string
+      type:
+        description: 出入库类型, inbound-入库; outbound-出库; 不传或为空-全部类型
+        type: string
+    required:
+    - endDate
+    - startDate
+    type: object
+  InboundMoldCodeVO:
+    properties:
+      jobID:
+        description: 任务ID
+        type: integer
+      moldCode:
+        description: 模具编码
+        type: string
+    type: object
+  InboundSpareRequestVO:
+    properties:
+      count:
+        description: 入库数量
+        minimum: 1
+        type: integer
+      location:
+        description: 入库位置
+        type: string
+      remark:
+        description: 备注
+        type: string
+      spareCode:
+        description: 备件编号
+        type: string
+      type:
+        description: 入库类型
+        type: string
+    required:
+    - location
+    - spareCode
+    - type
+    type: object
+  LineProductionRequestVO:
+    properties:
+      endDate:
+        description: 结束日期
+        type: string
+      startDate:
+        description: 开始日期
+        type: string
+    required:
+    - endDate
+    - startDate
+    type: object
+  LineProductionResponseVo:
+    properties:
+      dayShift:
+        allOf:
+        - $ref: '#/definitions/shiftProductionVo'
+        description: 白班
+      lineLevel:
+        description: 产线
+        type: string
+      nightShift:
+        allOf:
+        - $ref: '#/definitions/shiftProductionVo'
+        description: 晚班
+    type: object
+  LoginVO:
+    properties:
+      loginName:
+        description: 工号
+        type: string
+      passWord:
+        description: 密码，rsa加密
+        type: string
+    required:
+    - loginName
+    - passWord
+    type: object
+  MaintenanceStandardContentVO:
+    properties:
+      cycle:
+        description: 周期
+        type: integer
+      eligibilityCriteria:
+        description: 合格标准
+        type: string
+      item:
+        description: 维护项
+        type: string
+      judgeMethod:
+        description: 维护判断方法
+        type: string
+      maintenanceMethod:
+        description: 维护方法
+        type: string
+    type: object
+  MaintenanceTaskApprovalVO:
+    properties:
+      approvalComment:
+        description: 审批意见
+        type: string
+      approvalStatus:
+        description: 审批状态：0-待审批 1-通过 2-驳回
+        type: integer
+      id:
+        description: 保养任务ID
+        type: integer
+    required:
+    - approvalComment
+    - approvalStatus
+    - id
+    type: object
+  MaintenanceTaskChargeVO:
+    properties:
+      chargeName:
+        description: 负责人名称
+        type: string
+      id:
+        description: 保养任务ID
+        type: integer
+    required:
+    - chargeName
+    - id
+    type: object
+  MaintenanceTaskContentVO:
+    properties:
+      cycle:
+        description: 周期
+        type: integer
+      eligibilityCriteria:
+        description: 合格标准
+        type: string
+      isMaintenance:
+        description: 是否保养,Y/N
+        type: string
+      item:
+        description: 维护项
+        type: string
+      judgeMethod:
+        description: 维护判断方法
+        type: string
+      maintenanceMethod:
+        description: 维护方法
+        type: string
+      remark:
+        description: 备注
+        type: string
+    type: object
+  MaintenanceTaskDeleteVO:
+    properties:
+      id:
+        description: 保养任务ID
+        type: integer
+      status:
+        description: 任务状态, complete-已保养任务; timeout-超时任务; wait-待保养任务; timeout-超时任务
+        type: string
+    required:
+    - id
+    - status
+    type: object
+  MaintenanceTaskOneOutVO:
+    properties:
+      code:
+        description: 任务编码
+        type: string
+      content:
+        description: 保养任务内容
+        items:
+          $ref: '#/definitions/MaintenanceTaskContentVO'
+        type: array
+      createdBy:
+        description: 创建人
+        type: string
+      id:
+        type: integer
+      maintenanceLevel:
+        description: 保养等级
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      moldMaintenanceStandardId:
+        description: 标准ID
+        type: integer
+      moldName:
+        description: 模具名称
+        type: string
+      operator:
+        description: 保养人
+        type: string
+      remark:
+        description: 任务备注
+        type: string
+      replaceSpare:
+        description: 更换备件
+        items:
+          $ref: '#/definitions/ReplaceSpareOneVO'
+        type: array
+      standardName:
+        description: 标准名称
+        type: string
+      taskType:
+        description: 任务类型 auto-自动; manual-手动
+        type: string
+      time:
+        description: 保养时间
+        type: string
+      type:
+        description: 模具类型
+        type: string
+    type: object
+  MockProductDataVO:
+    properties:
+      count:
+        description: 数量
+        type: integer
+      lineLevel:
+        description: 线别
+        type: string
+      orderCode:
+        description: 工单号
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+    type: object
+  ModifyPasswordVO:
+    properties:
+      newPwd:
+        description: 新密码，rsa加密
+        type: string
+      oldPwd:
+        description: 原始密码，rsa加密
+        type: string
+    required:
+    - newPwd
+    - oldPwd
+    type: object
+  MoldCustomVO:
+    properties:
+      id:
+        type: integer
+      k:
+        description: 字段名
+        type: string
+      v:
+        description: 字段值g
+        type: string
+    type: object
+  MoldExceptionVO:
+    properties:
+      cnt:
+        description: 累计次数
+        type: integer
+      cost:
+        description: 累计损失工时，单位分钟
+        type: integer
+      faultDesc:
+        description: 故障描述
+        type: string
+    type: object
+  MoldImportParsedVOS:
+    properties:
+      data:
+        description: 导入数据
+        items:
+          $ref: '#/definitions/MoldImportVO'
+        type: array
+    type: object
+  MoldImportVO:
+    properties:
+      category:
+        description: 模具属性
+        type: string
+      clientName:
+        description: 客户名称
+        type: string
+      code:
+        description: 模具编号
+        type: string
+      firstUseDate:
+        description: 第一次使用日期
+        type: string
+      lineLevel:
+        description: 使用线别
+        type: string
+      makeDate:
+        description: 制造日期
+        type: string
+      name:
+        description: 模具名称
+        type: string
+      partCodes:
+        description: 模具零件号
+        type: string
+      platform:
+        description: 平台
+        type: string
+      process:
+        description: 工序
+        type: string
+      projectName:
+        description: 项目名称
+        type: string
+      propertyNumber:
+        description: 资产编号
+        type: string
+      provide:
+        description: 模具供应商
+        type: string
+      rfid:
+        description: YearLimit      float64   `json:"yearLimit" excel:"使用年限" validate:"required"`                                              //
+          使用年限
+        type: string
+      sizeHeigh:
+        description: 模具高
+        type: number
+      sizeLong:
+        description: 模具长
+        type: number
+      sizeWidth:
+        description: 模具宽
+        type: number
+      status:
+        description: 模具状态
+        type: string
+      type:
+        description: 模具类型
+        type: string
+      weight:
+        description: 模具重量
+        type: number
+    required:
+    - category
+    - clientName
+    - code
+    - lineLevel
+    - name
+    - platform
+    - process
+    - provide
+    - sizeHeigh
+    - sizeLong
+    - sizeWidth
+    - status
+    - type
+    type: object
+  MoldInBoundVO:
+    properties:
+      agv:
+        description: 是否调用AGV
+        type: boolean
+      srcLocation:
+        description: 产线位置
+        type: string
+      stationLocation:
+        description: 站口位置
+        type: string
+      type:
+        description: 入库类型
+        type: string
+    required:
+    - srcLocation
+    - stationLocation
+    - type
+    type: object
+  MoldInOutBoundJobVO:
+    properties:
+      agv:
+        description: 是否调度agv
+        type: boolean
+      cell:
+        description: 格
+        type: string
+      col:
+        description: 列
+        type: string
+      createdBy:
+        description: 出库人
+        type: string
+      destLocation:
+        description: 终点位置编码
+        type: string
+      faultReason:
+        description: 错误原因
+        type: string
+      gmtCompleted:
+        description: 完成时间
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      id:
+        type: integer
+      layer:
+        description: 层
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      moldId:
+        description: 模具ID
+        type: integer
+      moldName:
+        description: 模具名称
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      reason:
+        description: 出入库原因
+        type: string
+      rfid:
+        description: 是否需要用户手动传入rfid
+        type: boolean
+      srcLocation:
+        description: 起始位置编码
+        type: string
+      status:
+        description: 状态
+        type: string
+      taskNo:
+        description: 任务编码，同agv中间表
+        type: string
+      taskStage:
+        description: 任务阶段编码 100-Agv搬运;200-模具入站;300-模具入库; 600-模具出库出站;700-AGV搬运;1000-任务完成;1100-任务失败;1200-任务取消
+        type: string
+      type:
+        description: 类型：出库/入库
+        type: string
+    type: object
+  MoldMaintenanceTaskOutVO:
+    properties:
+      complete:
+        description: 今天已完成保养
+        type: integer
+      pause:
+        description: 挂起
+        type: integer
+      timeout:
+        description: 超时未保养
+        type: integer
+      wait:
+        description: 未完成保养
+        type: integer
+    type: object
+  MoldOutBoundVO:
+    properties:
+      agv:
+        description: 是否调用AGV
+        type: boolean
+      destLocation:
+        description: 目的地址,出库的产线位置
+        type: string
+      moldCodeList:
+        description: 模具编号
+        items:
+          type: string
+        type: array
+    required:
+    - moldCodeList
+    type: object
+  MoldRelPageOutVO:
+    properties:
+      code:
+        description: 模具编码
+        type: string
+      id:
+        description: ID
+        type: integer
+      level:
+        description: 保养级别
+        type: string
+      lineLevel:
+        description: 线别
+        type: string
+      name:
+        description: 模具名称
+        type: string
+      partCodes:
+        description: 零件号
+        type: string
+      process:
+        description: 工序
+        type: string
+    type: object
+  MoldStandardSelectVO:
+    properties:
+      id:
+        description: ID
+        type: integer
+      maintenanceLevel:
+        description: 保养级别
+        type: string
+      maintenanceName:
+        description: 保养名称
+        type: string
+    type: object
+  MoldStatusGroupOutVO:
+    properties:
+      all:
+        description: 所有模具
+        type: integer
+      baofei:
+        description: 报废模具
+        type: integer
+      fengcun:
+        description: 封存模具
+        type: integer
+      zhengchang:
+        description: 正常模具
+        type: integer
+    type: object
+  OutboundSpareRequestVO:
+    properties:
+      count:
+        description: 出库数量
+        minimum: 1
+        type: integer
+      remark:
+        description: 备注
+        type: string
+      spareCode:
+        description: 备件编号
+        type: string
+      type:
+        description: 出库类型
+        type: string
+    required:
+    - spareCode
+    - type
+    type: object
+  PageBomOutVO:
+    properties:
+      assemblyRelation:
+        description: 装配关系
+        type: string
+      count:
+        description: 数量
+        type: integer
+      flavor:
+        description: 规格
+        type: string
+      heatTreating:
+        description: 热处理
+        type: string
+      id:
+        type: integer
+      material:
+        description: 材料
+        type: string
+      moldCode:
+        description: 模具编号
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      partName:
+        description: 零件名称
+        type: string
+      remark:
+        description: 备注
+        type: string
+      standard:
+        description: 标准
+        type: string
+      standardComponent:
+        description: 标准件:Y 非标准件：N
+        type: string
+    type: object
+  PageMaintenancePlanOutputVO:
+    properties:
+      code:
+        description: 模具编号
+        type: string
+      createdBy:
+        description: 创建人
+        type: string
+      department:
+        description: 部门
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      id:
+        type: integer
+      moldType:
+        description: 模具类型
+        type: string
+      name:
+        description: 模具保养计划名称
+        type: string
+      operate:
+        description: 任务生成区间最小值操作符：小于等于lte、小于lt、等于ge
+        type: string
+      planType:
+        description: 模具保养计划类型
+        type: string
+      status:
+        description: 状态：running开启，pause暂停
+        type: string
+      taskEnd:
+        description: 任务生成区间最大值，大于
+        type: integer
+      taskStandard:
+        description: 保养冲刺，任务生成标准值，只做显示用
+        type: integer
+      taskStart:
+        description: 任务生成区间最小值
+        type: integer
+    type: object
+  PageMaintenanceStandardOutputVO:
+    properties:
+      code:
+        description: 标准编号
+        type: string
+      createdBy:
+        description: 创建人
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      id:
+        description: ID
+        type: integer
+      level:
+        description: 保养级别
+        type: string
+      name:
+        description: 保养名称
+        type: string
+      standardType:
+        description: 标准类型
+        type: string
+      type:
+        description: 模具类型
+        type: string
+      version:
+        description: 版本
+        type: string
+    type: object
+  PageMaintenanceTaskOutVO:
+    properties:
+      createdBy:
+        description: 创建人
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      gmtUpdated:
+        description: 更新时间
+        type: string
+      id:
+        description: 任务编码
+        type: integer
+      maintenanceLevel:
+        description: 保养等级
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      moldName:
+        description: 模具名称
+        type: string
+      operator:
+        description: 保养人
+        type: string
+      partCodes:
+        description: 零件号
+        type: string
+      projectName:
+        description: 项目名称
+        type: string
+      standardName:
+        description: 标准名称
+        type: string
+      status:
+        description: 状态
+        type: string
+      taskCode:
+        description: 模具名称
+        type: string
+      taskType:
+        description: 任务类型 auto-自动; manual-手动
+        type: string
+      type:
+        description: 模具类型
+        type: string
+    type: object
+  PageMessageOututVO:
+    properties:
+      content:
+        description: 消息内容
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      id:
+        type: integer
+      jobId:
+        description: 保养任务ID
+        type: integer
+      remodelId:
+        description: 改造任务ID
+        type: integer
+      status:
+        description: 状态:READ/UNREAD
+        type: string
+      type:
+        description: 消息类型：maintenance保养任务、remodel改造任务
+        type: string
+    type: object
+  PageMoldMaintenanceOutVO:
+    properties:
+      code:
+        description: 任务编号
+        type: string
+      id:
+        description: 任务ID
+        type: integer
+      maintenanceLevel:
+        description: 保养级别
+        type: string
+      standardName:
+        description: 标准名称
+        type: string
+      time:
+        description: 保养时间
+        type: string
+      updatedBy:
+        description: 保养人
+        type: string
+    type: object
+  PageMoldOutV1:
+    properties:
+      category:
+        description: 模具类别
+        type: string
+      clientName:
+        description: 客户名称
+        type: string
+      code:
+        description: 模具编号
+        type: string
+      customs:
+        description: 自定义参数
+      firstUseDate:
+        description: 第一次使用日期
+        type: string
+      flushCount:
+        description: 模具冲次
+        type: integer
+      have_plan:
+        description: 是否含有维保计划 在分页查询模具列表API中使用
+        type: boolean
+      id:
+        description: 模具编号
+        type: integer
+      lineLevel:
+        description: 使用线别
+        type: string
+      makeDate:
+        description: 制造日期
+        type: string
+      name:
+        description: 模具名称
+        type: string
+      partCodeStr:
+        description: 模具零件号, '/'拼接
+        type: string
+      partCodes:
+        description: 模具零件号
+        items:
+          type: string
+        type: array
+      platform:
+        description: 平台
+        type: string
+      process:
+        description: 工序
+        type: string
+      projectName:
+        description: 项目名称
+        type: string
+      propertyNumber:
+        description: 资产编号
+        type: string
+      provide:
+        description: 模具供应商
+        type: string
+      rfid:
+        description: RFID
+        type: string
+      sizeHeigh:
+        description: 模具高
+        type: number
+      sizeLong:
+        description: 模具长
+        type: number
+      sizeWidth:
+        description: 模具宽
+        type: number
+      status:
+        description: 模具状态
+        type: string
+      type:
+        description: 模具类型
+        type: string
+      weight:
+        description: 模具重量
+        type: number
+      yearLimit:
+        description: 使用年限
+        type: number
+    type: object
+  PageMoldOutVO:
+    properties:
+      category:
+        description: 模具类别
+        type: string
+      clientName:
+        description: 客户名称
+        type: string
+      code:
+        description: 模具编号
+        type: string
+      customs:
+        description: 自定义参数
+      firstUseDate:
+        description: 第一次使用日期
+        type: string
+      flushCount:
+        description: 模具冲次
+        type: integer
+      id:
+        description: 模具编号
+        type: integer
+      lineLevel:
+        description: 使用线别
+        type: string
+      makeDate:
+        description: 制造日期
+        type: string
+      name:
+        description: 模具名称
+        type: string
+      partCodeStr:
+        description: 模具零件号, '/'拼接
+        type: string
+      partCodes:
+        description: 模具零件号
+        items:
+          type: string
+        type: array
+      platform:
+        description: 平台
+        type: string
+      process:
+        description: 工序
+        type: string
+      projectName:
+        description: 项目名称
+        type: string
+      propertyNumber:
+        description: 资产编号
+        type: string
+      provide:
+        description: 模具供应商
+        type: string
+      rfid:
+        description: RFID
+        type: string
+      sizeHeigh:
+        description: 模具高
+        type: number
+      sizeLong:
+        description: 模具长
+        type: number
+      sizeWidth:
+        description: 模具宽
+        type: number
+      status:
+        description: 模具状态
+        type: string
+      type:
+        description: 模具类型
+        type: string
+      weight:
+        description: 模具重量
+        type: number
+      yearLimit:
+        description: 使用年限
+        type: number
+    type: object
+  PageMoldingParamsOutVO:
+    properties:
+      customs:
+        description: 自定义字段
+        items:
+          $ref: '#/definitions/MoldCustomVO'
+        type: array
+      defensiveDevice:
+        description: 防错装置
+        type: string
+      desc:
+        description: 描述
+        type: string
+      height:
+        description: 模具高度
+        type: number
+      moldCode:
+        description: 模具编号
+        type: string
+    type: object
+  PageProductResumeOutputVO:
+    properties:
+      completeTime:
+        description: 生产完成时间
+        type: string
+      count:
+        description: 工单数量
+        type: integer
+      id:
+        type: integer
+      lineLevel:
+        description: 线别
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      moldName:
+        description: 模具名称
+        type: string
+      moldType:
+        description: 模具类型
+        type: string
+      orderCode:
+        description: 工单号
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      sumCount:
+        description: 总计数
+        type: integer
+    type: object
+  PageQualityOutVO:
+    properties:
+      code:
+        description: 质量编号
+        type: string
+      createdBy:
+        description: 录入人
+        type: string
+      defectCount:
+        description: 不良数量
+        type: integer
+      defectDesc:
+        description: 不良描述
+        type: string
+      gmtCreated:
+        description: 录入时间
+        type: string
+      gmtUpdated:
+        description: 更新时间
+        type: string
+      id:
+        type: integer
+      lineLevel:
+        description: 线别
+        type: string
+      moldCode:
+        description: 模具编号
+        type: string
+      moldId:
+        description: 模具ID
+        type: integer
+      orderCode:
+        description: 工单号
+        type: string
+      partCodes:
+        description: 模具零件号, '/'拼接
+        type: string
+      productionCount:
+        description: 生产数量
+        type: integer
+      qualityContent:
+        description: 质量内容
+        type: string
+      updatedBy:
+        description: 更新人
+        type: string
+    type: object
+  PageRemodelOutVO:
+    properties:
+      code:
+        description: 改造编码
+        type: string
+      content:
+        description: 改造内容
+        type: string
+      delayDay:
+        description: 延期天数，范围：1-7
+        type: integer
+      director:
+        description: 责任人
+        type: string
+      finishTime:
+        description: 改造完成时间
+        type: string
+      id:
+        type: integer
+      isDelay:
+        description: 是否延期
+        type: string
+      location:
+        description: 改造地点
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      partCodes:
+        description: 零件号
+        type: string
+      projectName:
+        description: 项目名称
+        type: string
+      remodelEndTime:
+        description: 改造结束时间
+        type: string
+      remodelStartTime:
+        description: 改造开始时间
+        type: string
+      status:
+        description: 状态
+        type: string
+      type:
+        description: 改造类别
+        type: string
+      withdrawReason:
+        description: 撤销原因
+        type: string
+    type: object
+  PageRepairOutVO:
+    properties:
+      arriveTime:
+        description: 到达时间开始
+        type: string
+      auditorEngine:
+        description: 审核-维修工程师
+        type: string
+      auditorProduct:
+        description: 审核-生产组长
+        type: string
+      code:
+        description: 维修编号
+        type: string
+      confirmor:
+        description: 确定人
+        type: string
+      faultDesc:
+        description: 故障描述
+        type: string
+      finishTime:
+        description: 完成时间开始
+        type: string
+      id:
+        type: integer
+      improveContent:
+        description: 永久改善内容
+        type: string
+      lastTime:
+        description: 维修时长(分钟)
+        type: integer
+      lineLevel:
+        description: 线别
+        type: string
+      lockor:
+        description: 锁定人
+        type: string
+      moldCode:
+        description: 模具编号
+        type: string
+      operator:
+        description: 操作者
+        type: string
+      partCodeStr:
+        description: 模具零件号, '/'拼接
+        type: string
+      partCodes:
+        description: 模具零件号
+        items:
+          type: string
+        type: array
+      repairContent:
+        description: 维修内容
+        type: string
+      repairLevel:
+        description: 维修等级
+        type: string
+      repairSpares:
+        description: 维修备件
+        items:
+          $ref: '#/definitions/RepairSpare'
+        type: array
+      repairStation:
+        description: 维修工站
+        type: string
+      repairStations:
+        description: 维修工站
+        items:
+          type: string
+        type: array
+      repairtor:
+        description: 维修者
+        type: string
+      reportTime:
+        description: 报告时间开始
+        type: string
+      sumLastTime:
+        description: 总维修时长(分钟)
+        type: integer
+      unlockor:
+        description: 解锁人
+        type: string
+    type: object
+  PageSpareOutVO:
+    properties:
+      code:
+        description: 备件编号
+        type: string
+      flavor:
+        description: 备件规格
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      gmtUpdated:
+        description: 修改时间
+        type: string
+      id:
+        description: ID
+        type: integer
+      material:
+        description: 材质
+        type: string
+      name:
+        description: 备件名称
+        type: string
+    type: object
+  PageSpareRequestOutVO:
+    properties:
+      count:
+        description: 出入库数量
+        type: integer
+      flavor:
+        description: 备件规格
+        type: string
+      inboundTime:
+        description: 入库时间
+        type: integer
+      location:
+        description: 出入库位置
+        type: string
+      material:
+        description: 材质
+        type: string
+      name:
+        description: 备件名称
+        type: string
+      spareCode:
+        description: 备件编号
+        type: string
+    type: object
+  PartCodeQueryMoldVO:
+    properties:
+      partCode:
+        description: 零件号
+        type: string
+    required:
+    - partCode
+    type: object
+  PdWMSRequestResponseVO:
+    properties:
+      binCode:
+        type: string
+      createTime:
+        type: string
+      deviceStatus:
+        type: integer
+      errorCode:
+        type: string
+      errorMsg:
+        type: string
+      flag:
+        type: integer
+      partNo:
+        type: string
+      taskId:
+        type: string
+      taskNo:
+        type: string
+      taskStatus:
+        type: integer
+      taskType:
+        type: integer
+      updateTime:
+        type: string
+    type: object
+  PdWMSRequestVO:
+    properties:
+      binCode:
+        description: 目的地BinCode
+        type: string
+      taskNo:
+        description: 任务号
+        type: string
+      taskType:
+        description: 任务类型
+        type: integer
+    required:
+    - binCode
+    - taskNo
+    - taskType
+    type: object
+  PlcReadVO:
+    properties:
+      bit:
+        description: 位，不传就读取指定字节数
+        type: integer
+      db:
+        description: db块
+        type: integer
+      offset:
+        description: 偏移
+        type: integer
+      size:
+        description: 读取的字节数：1/2/4，读取位可以不传
+        type: integer
+      type:
+        description: PLC库类型：small小库/big大库
+        type: string
+    required:
+    - db
+    - offset
+    - type
+    type: object
+  PlcWriteVO:
+    properties:
+      bit:
+        description: 位，不传就读取指定字节数
+        type: integer
+      db:
+        description: db块
+        type: integer
+      offset:
+        description: 偏移
+        type: integer
+      size:
+        description: 读取的字节数：1/2/4，读取位可以不传
+        type: integer
+      type:
+        description: PLC库类型：small小库/big大库
+        type: string
+      value:
+        description: 写操作要写入的值
+        type: integer
+    required:
+    - db
+    - offset
+    - type
+    - value
+    type: object
+  RepairSpare:
+    properties:
+      code:
+        type: string
+      count:
+        type: integer
+    type: object
+  ReplaceSpareOneVO:
+    properties:
+      count:
+        description: 更换数量
+        type: integer
+      flavor:
+        description: 规格型号
+        type: string
+      remark:
+        description: 备注
+        type: string
+      spareCode:
+        description: 备件编号
+        type: string
+      spareName:
+        description: 备件名称
+        type: string
+    type: object
+  ReplaceSpareVO:
+    properties:
+      count:
+        type: integer
+      remark:
+        type: string
+      spareCode:
+        type: string
+    type: object
+  SaveMoldDocVO:
+    properties:
+      content:
+        description: 变更内容
+        type: string
+      fileKey:
+        description: 文件key
+        type: string
+      moldCode:
+        description: 模具code
+        type: string
+      name:
+        description: 文档名称
+        type: string
+      remark:
+        description: 备注
+        type: string
+      version:
+        description: 版本
+        type: string
+    required:
+    - content
+    - fileKey
+    - moldCode
+    - name
+    - version
+    type: object
+  SaveMoldingParamsVO:
+    properties:
+      defensiveDevice:
+        description: 防错装置
+        type: string
+      desc:
+        description: 描述
+        type: string
+      height:
+        description: 模具高度
+        type: number
+      moldCode:
+        description: 模具编号
+        type: string
+    type: object
+  ScrollMessageVO:
+    properties:
+      message:
+        description: 文本内容
+        type: string
+    type: object
+  SpareImportParsedVOS:
+    properties:
+      data:
+        description: 导入数据
+        items:
+          $ref: '#/definitions/SpareImportVO'
+        minItems: 1
+        type: array
+    type: object
+  SpareImportVO:
+    properties:
+      code:
+        description: 备件编号
+        type: string
+      flavor:
+        description: 备件规格
+        type: string
+      material:
+        description: 材质
+        type: string
+      name:
+        description: 备件名称
+        type: string
+    required:
+    - code
+    type: object
+  SpareRequestImportParsedVOS:
+    properties:
+      data:
+        description: 导入数据
+        items:
+          $ref: '#/definitions/SpareRequestImportVO'
+        minItems: 1
+        type: array
+    type: object
+  SpareRequestImportVO:
+    properties:
+      count:
+        description: 出入库数量
+        minimum: 1
+        type: integer
+      location:
+        description: 出入库位置
+        type: string
+      remark:
+        description: 备注
+        type: string
+      spareCode:
+        description: 备件编号
+        type: string
+      type:
+        description: 出入库类型
+        type: string
+    required:
+    - count
+    - location
+    - spareCode
+    - type
+    type: object
+  SpareRequestRecordOutVO:
+    properties:
+      count:
+        description: 出入库数量
+        type: integer
+      createdBy:
+        description: 出入库人
+        type: string
+      gmtCreated:
+        description: 出入库时间
+        type: string
+      location:
+        description: 出入库位置
+        type: string
+      remark:
+        description: 备注
+        type: string
+      spareCode:
+        description: 备件编号
+        type: string
+      type:
+        description: 出入库类型
+        type: string
+    type: object
+  SpareResumePageQueryVO:
+    properties:
+      currentPage:
+        description: 当前页
+        type: integer
+      moldCode:
+        type: string
+      rfidTid:
+        description: RFID TID
+        type: string
+      size:
+        description: 每页条数
+        type: integer
+      spareCode:
+        type: string
+      spareName:
+        type: string
+      time:
+        items:
+          type: string
+        type: array
+      type:
+        type: string
+    type: object
+  SpareResumePageVO:
+    properties:
+      count:
+        description: 使用数量
+        type: integer
+      createdBy:
+        description: 使用人
+        type: string
+      flushCount:
+        description: 备件使用冲次
+        type: integer
+      gmtCreated:
+        description: 使用时间
+        type: string
+      moldCode:
+        description: 模具编号
+        type: string
+      relCode:
+        description: 对应单号
+        type: string
+      spareCode:
+        description: 备件编号
+        type: string
+      spareName:
+        description: 备件名称
+        type: string
+    type: object
+  StereoscopicInsideMoldPageQueryVO:
+    properties:
+      currentPage:
+        description: 当前页
+        type: integer
+      moldCode:
+        type: string
+      partCode:
+        type: string
+      size:
+        description: 每页条数
+        type: integer
+    type: object
+  StereoscopicInsideMoldPageVO:
+    properties:
+      category:
+        description: 储位属性
+        type: string
+      cell:
+        description: 格
+        type: string
+      col:
+        description: 列
+        type: string
+      hasRfid:
+        description: 是否读取到标签
+        type: boolean
+      layer:
+        description: 层
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      moldId:
+        description: 模具ID
+        type: integer
+      partCodes:
+        description: 模具零件号
+        type: string
+    type: object
+  StereoscopicJobPageQueryVO:
+    properties:
+      completeTime:
+        description: 完成时间
+        items:
+          type: string
+        type: array
+      createdBy:
+        description: 创建人
+        type: string
+      createdTime:
+        description: 创建时间
+        items:
+          type: string
+        type: array
+      currentPage:
+        description: 当前页
+        type: integer
+      destLocation:
+        description: 终点位置编码
+        type: string
+      moldCode:
+        description: 模具编号
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      reason:
+        description: 入库类型/出库类型
+        type: string
+      size:
+        description: 每页条数
+        type: integer
+      srcLocation:
+        description: 起始位置编码
+        type: string
+      status:
+        description: 状态
+        type: string
+      taskNo:
+        description: 任务编码，同agv中间表
+        type: string
+      type:
+        description: 类型：出库outbound/入库inbound
+        type: string
+    required:
+    - type
+    type: object
+  StereoscopicLocationAllVO:
+    properties:
+      category:
+        description: 储位属性
+        type: string
+      cell:
+        description: 格
+        type: integer
+      col:
+        description: 列
+        type: integer
+      exist:
+        description: 是否存在
+        type: boolean
+      hasRfid:
+        description: 是否读取到标签
+        type: boolean
+      id:
+        type: integer
+      inboundStation:
+        description: 出库站点编号
+        type: string
+      layer:
+        description: 层
+        type: integer
+      moldCode:
+        description: 绑定模具code
+        type: string
+      moldId:
+        description: 模具ID
+        type: integer
+      moldStatus:
+        description: 模具状态, 1-正常 2-待保养 3-报废或封存 4-未知
+        type: integer
+      moldSteroscopicWarehouseId:
+        description: 立库ID
+        type: integer
+      moldSteroscopicWarehouseName:
+        description: 立库名称
+        type: string
+      outboundStation:
+        description: 入库站点编号
+        type: string
+      updateTime:
+        description: 更新时间
+        type: string
+    type: object
+  StereoscopicLocationCountVO:
+    properties:
+      all:
+        description: 储位总数
+        type: integer
+      exist:
+        description: 在库模具
+        type: integer
+      idle:
+        description: 闲置储位
+        type: integer
+    type: object
+  StereoscopicLocationPageQueryVO:
+    properties:
+      category:
+        description: 储位属性
+        type: string
+      cell:
+        description: 格
+        type: integer
+      codeOrName:
+        description: 模具编号和模具名称模糊查找，该参数有值时忽略其它条件参数
+        type: string
+      col:
+        description: 列
+        type: integer
+      currentPage:
+        description: 当前页
+        type: integer
+      exist:
+        description: 是否存在
+        type: boolean
+      inboundStation:
+        description: 出库站点编号
+        type: string
+      layer:
+        description: 层
+        type: integer
+      moldCode:
+        description: 绑定模具code
+        type: string
+      moldId:
+        description: 模具ID
+        type: integer
+      moldSteroscopicWarehouseId:
+        description: 立库ID
+        type: integer
+      moldSteroscopicWarehouseName:
+        description: 立库名称
+        type: string
+      outboundStation:
+        description: 入库站点编号
+        type: string
+      partCodes:
+        description: 零件号
+        type: string
+      platform:
+        description: 平台
+        type: string
+      projectName:
+        description: 项目名称
+        type: string
+      size:
+        description: 每页条数
+        type: integer
+    type: object
+  StereoscopicLocationPageVO:
+    properties:
+      category:
+        description: 储位属性
+        type: string
+      cell:
+        description: 格
+        type: integer
+      col:
+        description: 列
+        type: integer
+      exist:
+        description: 是否存在
+        type: boolean
+      hasRfid:
+        description: 是否读取到标签
+        type: boolean
+      id:
+        type: integer
+      inboundStation:
+        description: 出库站点编号
+        type: string
+      layer:
+        description: 层
+        type: integer
+      moldCode:
+        description: 绑定模具code
+        type: string
+      moldId:
+        description: 模具ID
+        type: integer
+      moldSteroscopicWarehouseId:
+        description: 立库ID
+        type: integer
+      moldSteroscopicWarehouseName:
+        description: 立库名称
+        type: string
+      outboundStation:
+        description: 入库站点编号
+        type: string
+      partCodes:
+        description: 零件号
+        type: string
+      platform:
+        description: 平台
+        type: string
+      projectName:
+        description: 项目名称
+        type: string
+      updateTime:
+        description: 更新时间
+        type: string
+    type: object
+  StereoscopicLocationUpdateVO:
+    properties:
+      id:
+        type: integer
+      moldCode:
+        description: 绑定模具code
+        type: string
+    required:
+    - id
+    type: object
+  StereoscopicOutsideMoldPageQueryVO:
+    properties:
+      currentPage:
+        description: 当前页
+        type: integer
+      moldCode:
+        type: string
+      partCode:
+        type: string
+      size:
+        description: 每页条数
+        type: integer
+    type: object
+  StereoscopicOutsideMoldPageVO:
+    properties:
+      category:
+        description: 模具类别
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      moldId:
+        description: 模具ID
+        type: integer
+      partCodes:
+        description: 模具零件号
+        type: string
+      rfid:
+        description: RFID
+        type: string
+      status:
+        description: 模具状态
+        type: string
+      type:
+        description: 模具类型
+        type: string
+    type: object
+  StereoscopicUnInboundMoldPageQueryVO:
+    properties:
+      currentPage:
+        description: 当前页
+        type: integer
+      moldCode:
+        type: string
+      partCode:
+        type: string
+      size:
+        description: 每页条数
+        type: integer
+    type: object
+  StereoscopicUnInboundMoldPageVO:
+    properties:
+      createdBy:
+        description: 出库人
+        type: string
+      destLocation:
+        description: 使用位置
+        type: string
+      gmtCompleted:
+        description: 完成时间
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+    type: object
+  StereoscopicWaitMaintenanceMoldPageQueryVO:
+    properties:
+      currentPage:
+        description: 当前页
+        type: integer
+      moldCode:
+        type: string
+      partCode:
+        type: string
+      size:
+        description: 每页条数
+        type: integer
+    type: object
+  StereoscopicWaitMaintenanceMoldPageVO:
+    properties:
+      acceptTime:
+        description: 接收时间
+        type: string
+      cell:
+        description: 格
+        type: string
+      col:
+        description: 列
+        type: string
+      createdBy:
+        description: 出库人
+        type: string
+      destLocation:
+        description: 使用位置
+        type: string
+      gmtCompleted:
+        description: 完成时间
+        type: string
+      layer:
+        description: 层
+        type: string
+      maintenanceLevel:
+        description: 保养级别
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      status:
+        description: 状态
+        type: string
+      taskCode:
+        description: 任务编码
+        type: string
+      taskCreateTime:
+        description: 任务创建时间
+        type: string
+    type: object
+  StereoscopicWaitRemodelMoldPageQueryVO:
+    properties:
+      currentPage:
+        description: 当前页
+        type: integer
+      moldCode:
+        description: 模具编号
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      size:
+        description: 每页条数
+        type: integer
+    type: object
+  StereoscopicWaitRemodelPageVO:
+    properties:
+      id:
+        type: integer
+      isDelay:
+        description: 是否延期
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      moldName:
+        description: 模具名称
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      remodelCode:
+        description: 改造编码
+        type: string
+      remodelContent:
+        description: 改造内容
+        type: string
+      remodelDirector:
+        description: 责任人
+        type: string
+      remodelEndTime:
+        description: 改造结束时间
+        type: string
+      remodelLocation:
+        description: 改造地点
+        type: string
+      remodelStartTime:
+        description: 改造开始时间
+        type: string
+      remodelType:
+        description: 改造类别
+        type: string
+    type: object
+  StopJobVO:
+    properties:
+      isRecord:
+        description: 是否记账
+        type: boolean
+      jobID:
+        description: 任务ID
+        type: integer
+    type: object
+  SubmitMoldMaintenanceTaskVO:
+    properties:
+      content:
+        description: 保养任务内容
+        items:
+          $ref: '#/definitions/MaintenanceTaskContentVO'
+        type: array
+      id:
+        description: ID
+        type: integer
+      maintenanceLevel:
+        description: 保养级别
+        type: string
+      moldMaintenanceStandardId:
+        description: 标准ID
+        type: integer
+      operator:
+        description: 保养人
+        type: string
+      remark:
+        description: 任务备注
+        type: string
+      replaceSpare:
+        description: 更换备件
+        items:
+          $ref: '#/definitions/ReplaceSpareVO'
+        type: array
+      standardName:
+        description: 标准名称
+        type: string
+      time:
+        description: 保养时间
+        type: string
+    required:
+    - id
+    - maintenanceLevel
+    - moldMaintenanceStandardId
+    - operator
+    - standardName
+    - time
+    type: object
+  UpdateBomVO:
+    properties:
+      assemblyRelation:
+        description: 装配关系
+        type: string
+      count:
+        description: 数量
+        type: integer
+      flavor:
+        description: 规格
+        type: string
+      heatTreating:
+        description: 热处理
+        type: string
+      id:
+        type: integer
+      material:
+        description: 材料
+        type: string
+      moldCode:
+        description: 模具编号
+        type: string
+      partCode:
+        description: 零件号
+        type: string
+      partName:
+        description: 零件名称
+        type: string
+      remark:
+        description: 备注
+        type: string
+      standard:
+        description: 标准
+        type: string
+    type: object
+  UpdateDictGroupVO:
+    properties:
+      code:
+        description: 组code，全局唯一
+        type: string
+      id:
+        description: 组ID
+        type: integer
+      name:
+        description: 新的组名称
+        type: string
+    required:
+    - code
+    - id
+    - name
+    type: object
+  UpdateDictPropertyVO:
+    properties:
+      groupCode:
+        description: 字典组Code
+        type: string
+      id:
+        description: 字典ID
+        type: integer
+      key:
+        description: 字典key,全局唯一
+        type: string
+      order:
+        description: 排序
+        type: integer
+      valueCn:
+        description: 字典值，中文
+        type: string
+      valueEn:
+        description: 字典值，英文
+        type: string
+    required:
+    - groupCode
+    - id
+    - key
+    type: object
+  UpdateMoldKnowledgeVO:
+    properties:
+      content:
+        description: 知识库内容
+        type: string
+      files:
+        description: 上传保存文件
+        items:
+          $ref: '#/definitions/base.FileStruct'
+        type: array
+      group:
+        description: 知识库组
+        type: string
+      id:
+        description: 知识库ID
+        type: integer
+      name:
+        description: 知识库名称
+        type: string
+      style:
+        description: 书皮样式
+        type: string
+    required:
+    - group
+    - id
+    - name
+    type: object
+  UpdateMoldMaintenancePlanVO:
+    properties:
+      id:
+        type: integer
+      moldIds:
+        description: 计时类型计划关联的模具ID列表
+        items:
+          type: integer
+        type: array
+      moldType:
+        description: 模具类型
+        type: string
+      name:
+        description: 模具保养计划名称
+        type: string
+      operate:
+        description: 任务生成区间最小值操作符：小于等于lte、小于lt、等于ge
+        type: string
+      planCron:
+        description: 计时cron表达式
+        type: string
+      planType:
+        description: 模具保养计划类型:timing-计时; metering-计量
+        type: string
+      taskEnd:
+        description: 任务生成区间最大值，大于
+        type: integer
+      taskStandard:
+        description: 保养冲刺，任务生成标准值，只做显示用
+        type: integer
+      taskStart:
+        description: 任务生成区间最小值
+        type: integer
+      timeoutHours:
+        description: 计时类型计划超时时间(小时)
+        type: integer
+    required:
+    - id
+    - name
+    - planType
+    type: object
+  UpdateMoldMaintenanceStandardVO:
+    properties:
+      code:
+        description: 标准编号
+        type: string
+      content:
+        description: 保养标准内容
+        items:
+          $ref: '#/definitions/MaintenanceStandardContentVO'
+        type: array
+      id:
+        description: ID
+        type: integer
+      level:
+        description: 保养级别
+        type: string
+      moldIds:
+        description: 关联模具，only 专用标准
+        items:
+          type: integer
+        type: array
+      name:
+        description: 保养名称
+        type: string
+      standardType:
+        description: 标准类型
+        type: string
+      type:
+        description: 模具类型
+        type: string
+      version:
+        description: 版本
+        type: string
+    required:
+    - code
+    - id
+    - level
+    - name
+    - standardType
+    - type
+    - version
+    type: object
+  UpdateMoldVO:
+    properties:
+      category:
+        description: 模具类别
+        type: string
+      clientName:
+        description: 客户名称
+        type: string
+      code:
+        description: 模具编号
+        type: string
+      customs:
+        description: 自定义参数
+        items:
+          $ref: '#/definitions/MoldCustomVO'
+        type: array
+      firstUseDate:
+        description: 第一次使用日期
+        type: string
+      id:
+        description: ID
+        type: integer
+      lineLevel:
+        description: 使用线别
+        type: string
+      makeDate:
+        description: 制造日期
+        type: string
+      name:
+        description: 模具名称
+        type: string
+      partCodes:
+        description: 模具零件号
+        items:
+          type: string
+        type: array
+      platform:
+        description: 平台
+        type: string
+      process:
+        description: 工序
+        type: string
+      projectName:
+        description: 项目名称
+        type: string
+      propertyNumber:
+        description: 资产编号
+        type: string
+      provide:
+        description: 模具供应商
+        type: string
+      rfid:
+        description: RFID
+        type: string
+      sizeHeigh:
+        description: 模具高
+        type: number
+      sizeLong:
+        description: 模具长
+        type: number
+      sizeWidth:
+        description: 模具宽
+        type: number
+      status:
+        description: 模具状态
+        type: string
+      type:
+        description: 模具类型
+        type: string
+      weight:
+        description: 模具重量
+        type: number
+      yearLimit:
+        description: 使用年限
+        type: number
+    required:
+    - code
+    - id
+    - lineLevel
+    - name
+    - platform
+    - process
+    - provide
+    - sizeHeigh
+    - sizeLong
+    - sizeWidth
+    - status
+    - type
+    type: object
+  UpdateQualityVO:
+    properties:
+      defectCount:
+        description: 不良数量
+        type: integer
+      defectDesc:
+        description: 不良描述
+        type: string
+      id:
+        type: integer
+      lineLevel:
+        description: 线别
+        type: string
+      moldId:
+        description: 模具ID
+        type: integer
+      orderCode:
+        description: 工单号
+        type: string
+      productionCount:
+        description: 生产数量
+        type: integer
+      qualityContent:
+        description: 质量内容
+        type: string
+    type: object
+  UpdateRemodelVO:
+    properties:
+      content:
+        description: 改造内容
+        type: string
+      director:
+        description: 责任人
+        type: string
+      id:
+        type: integer
+      location:
+        description: 改造地点
+        type: string
+      moldCode:
+        description: 模具编码
+        type: string
+      remodelEndTime:
+        description: 改造结束时间
+        type: string
+      remodelStartTime:
+        description: 改造开始时间
+        type: string
+      type:
+        description: 改造类别
+        type: string
+    type: object
+  UpdateRepairVO:
+    properties:
+      arriveTime:
+        description: 到达时间开始
+        type: string
+      auditorEngine:
+        description: 审核-维修工程师
+        type: string
+      auditorProduct:
+        description: 审核-生产组长
+        type: string
+      confirmor:
+        description: 确定人
+        type: string
+      faultDesc:
+        description: 故障描述
+        type: string
+      finishTime:
+        description: 完成时间开始
+        type: string
+      id:
+        type: integer
+      improveContent:
+        description: 永久改善内容
+        type: string
+      lastTime:
+        description: 维修时长(分钟)
+        minimum: 0
+        type: integer
+      lineLevel:
+        description: 线别
+        type: string
+      lockor:
+        description: 锁定人
+        type: string
+      moldCode:
+        description: 模具编号
+        type: string
+      operator:
+        description: 操作者
+        type: string
+      repairContent:
+        description: 维修内容
+        type: string
+      repairLevel:
+        description: 维修等级
+        type: string
+      repairSpares:
+        description: 维修备件更换
+        items:
+          $ref: '#/definitions/RepairSpare'
+        type: array
+      repairStations:
+        description: 维修工站
+        items:
+          type: string
+        type: array
+      repairtor:
+        description: 维修者
+        type: string
+      reportTime:
+        description: 报告时间开始
+        type: string
+      unlockor:
+        description: 解锁人
+        type: string
+    type: object
+  UpdateSpareVO:
+    properties:
+      code:
+        description: 备件编号
+        type: string
+      flavor:
+        description: 备件规格
+        type: string
+      id:
+        description: ID
+        type: integer
+      material:
+        description: 材质
+        type: string
+      name:
+        description: 备件名称
+        type: string
+    required:
+    - code
+    - id
+    type: object
+  UpdateUserAuthorityVO:
+    properties:
+      codes:
+        description: 权限编码
+        items:
+          type: string
+        minItems: 1
+        type: array
+      loginName:
+        description: 工号
+        type: string
+    required:
+    - loginName
+    type: object
+  UpdateUserVO:
+    properties:
+      department:
+        description: 部门
+        type: string
+      id:
+        description: ID
+        type: integer
+      loginName:
+        description: 工号
+        type: string
+      name:
+        description: 姓名
+        type: string
+    required:
+    - department
+    - id
+    - loginName
+    - name
+    type: object
+  base.FileStruct:
+    properties:
+      bucketName:
+        description: minio 桶名称
+        type: string
+      fileKey:
+        description: minio key
+        type: string
+      fileName:
+        description: 文件名称
+        type: string
+    type: object
+  dashboard.ErrorTopTens:
+    properties:
+      countNum:
+        description: 统计次数
+        type: integer
+      faultDesc:
+        description: 故障描述/类型
+        type: string
+      lastTime:
+        description: 统计时长
+        type: integer
+    type: object
+  dashboard.LineList:
+    properties:
+      LineName:
+        description: 产线编号
+        type: string
+      lineLevel:
+        description: 产线编号
+        type: string
+    type: object
+  dashboard.MaintainList:
+    properties:
+      lastTime:
+        description: 维修时长
+        type: integer
+      lineLevel:
+        description: 产线编号
+        type: string
+      repairContent:
+        description: 故障类别
+        type: string
+      shiftNo:
+        description: 1白班2晚班
+        type: string
+    type: object
+  dashboard.OutageFactorVo:
+    properties:
+      LastTime:
+        description: 停机时长
+        type: integer
+      lineLevel:
+        description: 产线编号
+        type: string
+      rateNum:
+        description: 维修停机率
+        type: number
+      shiftNo:
+        description: 1白班2晚班
+        type: string
+    type: object
+  dashboard.RejectsProducts:
+    properties:
+      defectCount:
+        description: 不良数量
+        type: integer
+      defectDesc:
+        description: 不良描述
+        type: string
+      lineLevel:
+        description: 产线编号
+        type: string
+    type: object
+  dashboard.TendencyChartVo:
+    properties:
+      lineLevel:
+        description: 产线编号
+        type: string
+      reportDate:
+        description: x轴
+        type: string
+      reportValue1:
+        description: y1轴
+        type: number
+      reportValue2:
+        description: y1轴
+        type: number
+      value1Desc:
+        description: y1轴说明
+        type: string
+      value2Desc:
+        description: y2轴说明
+        type: string
+    type: object
+  dashboard.UserSparePartVo:
+    properties:
+      dateTime:
+        description: 日期
+        type: string
+      totleNum:
+        description: 消耗数量
+        type: integer
+    type: object
+  model.MoldInoutBoundJobDetail:
+    properties:
+      faultReason:
+        description: 错误原因
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      id:
+        type: integer
+      jobId:
+        description: 出入库任务表ID
+        type: integer
+      status:
+        description: 状态, success-成功 failure-失败 exception-异常
+        type: string
+      stepCode:
+        description: 步骤代码
+        type: integer
+      stepName:
+        description: 步骤名称
+        type: string
+    type: object
+  model.MoldMaintenancePlan:
+    properties:
+      code:
+        description: 模具编号
+        type: string
+      createdBy:
+        description: 创建人
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      gmtUpdated:
+        description: 修改时间
+        type: string
+      id:
+        type: integer
+      isDeleted:
+        description: 是否删除
+        type: string
+      moldType:
+        description: 模具类型
+        type: string
+      name:
+        description: 模具保养计划名称
+        type: string
+      operate:
+        description: 任务生成区间最小值操作符：小于等于lte、小于lt、等于ge
+        type: string
+      plan_cron:
+        description: 计时cron表达式
+        type: string
+      plan_type:
+        description: '计划类型: timing-计时; metering-计量'
+        type: string
+      status:
+        description: 状态
+        type: string
+      taskEnd:
+        description: 任务生成区间最大值，大于
+        type: integer
+      taskStandard:
+        description: 任务生成标准值，只做显示用
+        type: integer
+      taskStart:
+        description: 任务生成区间最小值，小于等于
+        type: integer
+      timeout_hours:
+        description: 计时类型计划超时时间(小时)
+        type: integer
+      updatedBy:
+        description: 修改人
+        type: string
+    type: object
+  model.MoldMaintenanceStandard:
+    properties:
+      code:
+        description: 标准编号
+        type: string
+      createdBy:
+        description: 创建人
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      gmtUpdated:
+        description: 修改时间
+        type: string
+      id:
+        type: integer
+      isDeleted:
+        description: 是否删除
+        type: string
+      level:
+        description: 保养级别
+        type: string
+      name:
+        description: 保养名称
+        type: string
+      standardType:
+        description: 标准类型
+        type: string
+      type:
+        description: 模具类型
+        type: string
+      updatedBy:
+        description: 修改人
+        type: string
+      version:
+        description: 版本
+        type: string
+    type: object
+  model.MoldMaintenanceTaskLifecycle:
+    properties:
+      approvalComment:
+        description: 审批意见
+        type: string
+      approvalId:
+        description: 审核人ID
+        type: string
+      approvalStatus:
+        description: 审批状态：0-待审批 1-通过 2-驳回
+        type: integer
+      content:
+        description: 内容
+        type: string
+      createdBy:
+        description: 创建人
+        type: string
+      gmtCreated:
+        description: 创建时间
+        type: string
+      gmtUpdated:
+        description: 修改时间
+        type: string
+      id:
+        type: integer
+      isApproval:
+        description: 是否需审批：0-需 1-无需
+        type: integer
+      isDeleted:
+        description: 是否删除
+        type: string
+      moldMaintenanceTaskId:
+        description: 模具标准任务ID
+        type: integer
+      operator:
+        description: 操作人
+        type: string
+      time:
+        description: 时间
+        type: string
+      title:
+        description: 标题,字典key
+        type: string
+      updatedBy:
+        description: 修改人
+        type: string
+    type: object
+  mold.MoldFlushCountVO:
+    properties:
+      id:
+        description: 模具id
+        type: integer
+      password:
+        description: 管理员密码，加密
+        type: string
+    required:
+    - id
+    type: object
+  mold.StatusVO:
+    properties:
+      id:
+        description: ID
+        type: integer
+      reason:
+        description: 撤单原因
+        type: string
+    type: object
+  partQtyVo:
+    properties:
+      partNo:
+        description: 零件号
+        type: string
+      qty:
+        description: 数量
+        type: integer
+    type: object
+  rtsp.RTSPTransSrv:
+    properties:
+      url:
+        type: string
+    type: object
+  scopestatistics.X:
+    properties:
+      day:
+        type: integer
+      month:
+        type: integer
+      week:
+        type: integer
+      year:
+        type: integer
+    type: object
+  shiftProductionVo:
+    properties:
+      maintenanceDuration:
+        description: 班次维修时长
+        type: integer
+      partList:
+        items:
+          $ref: '#/definitions/partQtyVo'
+        type: array
+      shiftMin:
+        description: 班次时长
+        type: integer
+      shiftNo:
+        description: 班次
+        type: integer
+      totalQty:
+        description: 总数量
+        type: integer
+    type: object
+  周报月报趋势图:
+    properties:
+      endDate:
+        description: 结束日期(按周传周数按月传月数)
+        type: string
+      lineLevel:
+        description: 产线
+        type: string
+      orderField:
+        description: 排序字段 次数：count 时间：time
+        type: string
+      reportCode:
+        description: 报告编码 统计生产数量:ProductTotleByWeek/ProductTotleByMonth;停机工时:StopLastTimeByWeek/StopLastTimeByMonth;故障次数:ErrorTimesByWeek/ErrorTimesByMonth;维修停机率:OutageRateByWeek/OutageRateByMonth;备件消耗趋势:UserSparePartByWeek/UserSparePartByMonth;
+        type: string
+      startDate:
+        description: 开始日期(按周传周数按月传月数)
+        type: string
+    required:
+    - endDate
+    - orderField
+    - reportCode
+    - startDate
+    type: object
+info:
+  contact: {}
+  description: 模具管理API
+  title: 模具管理API
+  version: "1.0"
+paths:
+  /dashboard/errorTopTen:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: LineProductionReportRequestVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/%E5%91%A8%E6%8A%A5%E6%9C%88%E6%8A%A5%E8%B6%8B%E5%8A%BF%E5%9B%BE'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dashboard.ErrorTopTens'
+      summary: 故障top10(按时间按次数)
+      tags:
+      - 看板
+  /dashboard/generateProductReport:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 趋势图-数据生成手动触发接口
+      tags:
+      - 看板
+  /dashboard/getLineList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dashboard.LineList'
+      summary: 趋势图-产线列表
+      tags:
+      - 看板
+  /dashboard/maintain:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: LineProductionRequestVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/LineProductionRequestVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dashboard.MaintainList'
+      summary: 日报-维修列表
+      tags:
+      - 看板
+  /dashboard/production:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: LineProductionRequestVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/LineProductionRequestVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/LineProductionResponseVo'
+      summary: 产线生产统计
+      tags:
+      - 看板
+  /dashboard/rejects:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: LineProductionRequestVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/LineProductionRequestVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dashboard.RejectsProducts'
+      summary: 日报-质量列表
+      tags:
+      - 看板
+  /dashboard/stopRate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: LineProductionRequestVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/LineProductionRequestVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dashboard.OutageFactorVo'
+      summary: 维修停机率-周月报（柱图）
+      tags:
+      - 看板
+  /dashboard/tendencyChart:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: LineProductionReportRequestVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/%E5%91%A8%E6%8A%A5%E6%9C%88%E6%8A%A5%E8%B6%8B%E5%8A%BF%E5%9B%BE'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dashboard.TendencyChartVo'
+      summary: 趋势图-周/月趋势图
+      tags:
+      - 看板
+  /dashboard/userSparePart:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: LineProductionRequestVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/LineProductionRequestVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dashboard.UserSparePartVo'
+      summary: 备件消耗趋势-日周月报
+      tags:
+      - 看板
+  /dict:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除字典属性
+      tags:
+      - 字典
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 字典组code
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 字典属性列表
+      tags:
+      - 字典
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateDictPropertyVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 新增字典属性
+      tags:
+      - 字典
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateDictPropertyVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新字典属性
+      tags:
+      - 字典
+  /dict/all:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 获取所有字典信息
+      tags:
+      - 字典
+  /dict/group:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除字典分类
+      tags:
+      - 字典
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 字典分类列表
+      tags:
+      - 字典
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateDictGroupVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 新增字典分类
+      tags:
+      - 字典
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateDictGroupVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新字典分类
+      tags:
+      - 字典
+  /dict/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 字典组code
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 每页数量
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 字典属性分页
+      tags:
+      - 字典
+  /email/timeout:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/EmailGetVO'
+      summary: 获取超时邮件发送人
+      tags:
+      - 邮件
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/EmailSetVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 设置超时邮件发送人
+      tags:
+      - 邮件
+  /file:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FileOutVO'
+      summary: 文件上传
+      tags:
+      - 文件
+  /knowledge:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除知识库
+      tags:
+      - 知识库
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 知识库标题
+        in: query
+        name: name
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 知识库列表
+      tags:
+      - 知识库
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateMoldKnowledgeVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 新增知识库
+      tags:
+      - 知识库
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateMoldKnowledgeVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新知识库
+      tags:
+      - 知识库
+  /knowledge/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: 知识库查看
+      tags:
+      - 知识库
+  /knowledge/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 知识库标题
+        in: query
+        name: name
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 每页数量
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 知识库分页
+      tags:
+      - 知识库
+  /knowledge/search:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: q
+        in: query
+        name: q
+        required: true
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 每页数量
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 知识库搜索
+      tags:
+      - 知识库
+  /maintenance/plan:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 删除保养计划
+      tags:
+      - 模具保养计划
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateMoldMaintenancePlanVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 新增保养计划
+      tags:
+      - 模具保养计划
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateMoldMaintenancePlanVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 更新保养计划
+      tags:
+      - 模具保养计划
+  /maintenance/plan/list:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 保养计划名称
+        in: query
+        name: name
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MoldMaintenancePlan'
+      summary: 保养计划列表
+      tags:
+      - 模具保养计划
+  /maintenance/plan/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MoldMaintenancePlan'
+      summary: 保养计划查看
+      tags:
+      - 模具保养计划
+  /maintenance/plan/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: codeOrName
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 创建时间开始
+        in: query
+        name: gmtCreatedBegin
+        type: string
+      - description: 创建时间结束
+        in: query
+        name: gmtCreatedEnd
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageMaintenancePlanOutputVO'
+      summary: 保养计划分页
+      tags:
+      - 模具保养计划
+  /maintenance/plan/status:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/IDVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 保养计划开启/暂停
+      tags:
+      - 模具保养计划
+  /maintenance/query/cron:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CronExpressionVo'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 查询保养计划Cron运行时间
+      tags:
+      - 模具保养计划
+  /maintenance/standard:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 删除保养标准
+      tags:
+      - 模具保养标准
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateMoldMaintenanceStandardVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: 新增保养标准
+      tags:
+      - 模具保养标准
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateMoldMaintenanceStandardVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 更新保养标准
+      tags:
+      - 模具保养标准
+  /maintenance/standard/list:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 保养标准名称
+        in: query
+        name: name
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MoldMaintenanceStandard'
+      summary: 保养标准列表
+      tags:
+      - 模具保养标准
+  /maintenance/standard/mold/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 模具编号/零件号
+        in: query
+        name: codeOrName
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 每页数量
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MoldRelPageOutVO'
+      summary: 关联模具列表查询
+      tags:
+      - 模具保养标准
+  /maintenance/standard/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MaintenanceStandardContentVO'
+      summary: 保养标准查看
+      tags:
+      - 模具保养标准
+  /maintenance/standard/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 标准编号
+        in: query
+        name: code
+        type: string
+      - in: query
+        name: codeOrName
+        type: string
+      - description: 创建人
+        in: query
+        name: createdBy
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 创建时间开始
+        in: query
+        name: gmtCreatedBegin
+        type: string
+      - description: 创建时间结束
+        in: query
+        name: gmtCreatedEnd
+        type: string
+      - description: 保养级别
+        in: query
+        name: level
+        type: string
+      - description: 保养名称
+        in: query
+        name: name
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageMaintenanceStandardOutputVO'
+      summary: 保养标准分页
+      tags:
+      - 模具保养标准
+  /maintenance/standard/select:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 模具编码
+        in: query
+        name: moldCode
+        required: true
+        type: string
+      - description: 保养级别
+        in: query
+        name: level
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MoldStandardSelectVO'
+      summary: 获取模具保养任务可选择的标准列表
+      tags:
+      - 模具保养标准
+  /maintenance/task:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/SubmitMoldMaintenanceTaskVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 提交保养任务
+      tags:
+      - 模具保养任务
+  /maintenance/task/approval:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/MaintenanceTaskApprovalVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 保养任务审核
+      tags:
+      - 模具保养任务
+  /maintenance/task/charge:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/MaintenanceTaskChargeVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 保养任务转派
+      tags:
+      - 模具保养任务
+  /maintenance/task/delete:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/MaintenanceTaskDeleteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 删除保养任务
+      tags:
+      - 模具保养任务
+  /maintenance/task/lifecycle:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MoldMaintenanceTaskLifecycle'
+      summary: 获取保养记录
+      tags:
+      - 模具保养任务
+  /maintenance/task/new:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/AddMoldMaintenanceTaskVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 新增保养任务
+      tags:
+      - 模具保养任务
+  /maintenance/task/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MaintenanceTaskOneOutVO'
+      summary: 保养任务查看
+      tags:
+      - 模具保养任务
+  /maintenance/task/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 模具编号/零件号
+        in: query
+        name: codeOrName
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 创建时间开始
+        in: query
+        name: gmtCreatedBegin
+        type: string
+      - description: 创建时间结束
+        in: query
+        name: gmtCreatedEnd
+        type: string
+      - in: query
+        name: maintenanceLevel
+        type: string
+      - in: query
+        name: moldCode
+        type: string
+      - description: 保养人
+        in: query
+        name: operator
+        type: string
+      - in: query
+        name: partCodes
+        type: string
+      - in: query
+        name: projectName
+        type: string
+      - description: RFID TID
+        in: query
+        name: rfidTid
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - in: query
+        name: standardName
+        type: string
+      - in: query
+        name: status
+        type: string
+      - in: query
+        name: taskCode
+        type: string
+      - description: 任务类型 auto-自动; manual-手动
+        in: query
+        name: taskType
+        type: string
+      - in: query
+        name: type
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageMaintenanceTaskOutVO'
+      summary: 保养任务分页
+      tags:
+      - 模具保养任务
+  /maintenance/task/status:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/mold.StatusVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 保养任务挂起/继续
+      tags:
+      - 模具保养任务
+  /message:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除消息
+      tags:
+      - 消息中心
+  /message/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: codeOrName
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageMessageOututVO'
+      summary: 消息分页
+      tags:
+      - 消息中心
+  /message/read:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/IDSVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"true"}'
+          schema:
+            type: string
+      summary: 消息已读
+      tags:
+      - 消息中心
+  /mold:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除台账
+      tags:
+      - 台账
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateMoldVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 添加台账
+      tags:
+      - 台账
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateMoldVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新台账
+      tags:
+      - 台账
+  /mold/bom:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除模具BOM
+      tags:
+      - 模具BOM
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateBomVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 添加模具BOM
+      tags:
+      - 模具BOM
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateBomVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新模具BOM
+      tags:
+      - 模具BOM
+  /mold/bom/excel:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 指定ID导出模具BOM
+        in: query
+        name: ids
+        type: array
+      - description: 是否标准件,Y:标准件 N:非标准件
+        in: query
+        name: standard
+        required: true
+        type: string
+      - description: 模具编码
+        in: query
+        name: moldCode
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导出
+      tags:
+      - 模具BOM
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: BomImportParsedVOS
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/BomImportParsedVOS'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导入解析后的Excel内容
+      tags:
+      - 模具BOM
+  /mold/bom/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageBomOutVO'
+      summary: 用户模具BOM查看
+      tags:
+      - 模具BOM
+  /mold/bom/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 装配关系
+        in: query
+        name: assemblyRelation
+        type: string
+      - description: 模具编号和名称模糊查找，该参数有值时忽略其它条件参数
+        in: query
+        name: codeOrName
+        type: string
+      - description: 数量
+        in: query
+        name: count
+        type: integer
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 规格
+        in: query
+        name: flavor
+        type: string
+      - description: 热处理
+        in: query
+        name: heatTreating
+        type: string
+      - description: 材料
+        in: query
+        name: material
+        type: string
+      - description: 模具编号
+        in: query
+        name: moldCode
+        type: string
+      - description: 零件号
+        in: query
+        name: partCode
+        type: string
+      - description: 零件名称
+        in: query
+        name: partName
+        type: string
+      - description: 备注
+        in: query
+        name: remark
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: 标准
+        in: query
+        name: standard
+        type: string
+      - description: 标准件:Y 非标准件：N
+        in: query
+        name: standardComponent
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageBomOutVO'
+      summary: 用户模具BOM分页
+      tags:
+      - 模具BOM
+  /mold/bom/parse:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: 是否标准件,Y:标准件 N:非标准件
+        in: formData
+        name: standard
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 解析Excel文件内容
+      tags:
+      - 模具BOM
+  /mold/by/part/code:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: PartCodeQueryMoldVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/PartCodeQueryMoldVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 查询模具编码根据零件号
+      tags:
+      - 台账
+  /mold/doc:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/SaveMoldDocVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 保存模具文档
+      tags:
+      - 模具文档
+  /mold/doc/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 模具文档名称
+        in: query
+        name: codeOrName
+        type: string
+      - description: 模具code
+        in: query
+        name: moldCode
+        required: true
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 每页数量
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 模具文档分页
+      tags:
+      - 模具文档
+  /mold/excel:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 指定ID导出台账
+        in: query
+        name: ids
+        type: array
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导出
+      tags:
+      - 台账
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MoldImportParsedVOS
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/MoldImportParsedVOS'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导入解析后的Excel内容
+      tags:
+      - 台账
+  /mold/flush:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/mold.MoldFlushCountVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 置零模具使用冲次
+      tags:
+      - 台账
+  /mold/inbound:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MoldInBoundVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/MoldInBoundVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 入库
+      tags:
+      - 模具立库
+  /mold/inoutbound/cancel:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: CancelJobVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/CancelJobVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 取消待执行的出入库任务
+      tags:
+      - 模具立库
+  /mold/inoutbound/rfid/code:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: InboundMoldCodeVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/InboundMoldCodeVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: RFID设备未扫描到时,手动传入模具编码
+      tags:
+      - 模具立库
+  /mold/inoutbound/stop:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: StopJobVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/StopJobVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 停止正在执行的所有出入库任务,注意：仅关闭程序处理逻辑，无法影响到具体立库和AGV
+      tags:
+      - 模具立库
+  /mold/maintenance/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 单号/名称
+        in: query
+        name: codeOrName
+        type: string
+      - description: 模具code
+        in: query
+        name: moldCode
+        required: true
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 每页数量
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageMoldMaintenanceOutVO'
+      summary: 保养履历分页
+      tags:
+      - 保养履历
+  /mold/molding:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/SaveMoldingParamsVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 保存成型参数
+      tags:
+      - 模具成型参数
+  /mold/molding/customs:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除模具成型参数
+      tags:
+      - 模具成型参数
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateMoldingParamsCustomsVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 保存成型参数自定义字段
+      tags:
+      - 模具成型参数
+  /mold/molding/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 模具编码
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageMoldingParamsOutVO'
+      summary: 用户成型参数查看
+      tags:
+      - 模具成型参数
+  /mold/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageMoldOutVO'
+      summary: 用户台账查看
+      tags:
+      - 台账
+  /mold/outbound:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MoldOutBoundVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/MoldOutBoundVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 出库
+      tags:
+      - 模具立库
+  /mold/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 模具类别
+        in: query
+        name: category
+        type: string
+      - description: 客户名称
+        in: query
+        name: clientName
+        type: string
+      - description: 模具编号
+        in: query
+        name: code
+        type: string
+      - description: 模具编号和名称模糊查找，该参数有值时忽略其它条件参数
+        in: query
+        name: codeOrName
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 不包含的模具类别 chongkong,chengxing
+        in: query
+        name: excludeType
+        type: string
+      - description: 第一次使用日期
+        in: query
+        name: firstUseDateBegin
+        type: string
+      - description: 第一次使用日期
+        in: query
+        name: firstUseDateEnd
+        type: string
+      - description: 使用线别
+        in: query
+        name: lineLevel
+        type: string
+      - description: 制造日期
+        in: query
+        name: makeDateBegin
+        type: string
+      - description: 制造日期
+        in: query
+        name: makeDateEnd
+        type: string
+      - description: 模具名称
+        in: query
+        name: name
+        type: string
+      - description: 模具零件号
+        in: query
+        name: partCodes
+        type: string
+      - description: 平台
+        in: query
+        name: platform
+        type: string
+      - description: 工序
+        in: query
+        name: process
+        type: string
+      - description: 项目名称
+        in: query
+        name: projectName
+        type: string
+      - description: 资产编号
+        in: query
+        name: propertyNumber
+        type: string
+      - description: 模具供应商
+        in: query
+        name: provide
+        type: string
+      - description: RFID TID
+        in: query
+        name: rfid
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: 模具高
+        in: query
+        name: sizeHeigh
+        type: number
+      - description: 模具长
+        in: query
+        name: sizeLong
+        type: number
+      - description: 模具宽
+        in: query
+        name: sizeWidth
+        type: number
+      - description: 模具状态
+        in: query
+        name: status
+        type: string
+      - description: 模具类型
+        in: query
+        name: type
+        type: string
+      - description: 模具重量
+        in: query
+        name: weight
+        type: number
+      - description: 使用年限
+        in: query
+        name: yearLimit
+        type: number
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageMoldOutV1'
+      summary: 用户台账分页
+      tags:
+      - 台账
+  /mold/parse:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 解析Excel文件内容
+      tags:
+      - 台账
+  /mold/part/code/group:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 查询模具所有零件号
+      tags:
+      - 台账
+  /mold/productresume/excel:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 指定ID导出备件
+        in: query
+        name: ids
+        type: array
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导出
+      tags:
+      - 生产履历
+  /mold/productresume/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 模具编号/零件号/工单号模糊查找
+        in: query
+        name: codeOrName
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 结束时间
+        in: query
+        name: endTime
+        type: string
+      - description: 线别
+        in: query
+        name: lineLevel
+        type: string
+      - description: RFID TID
+        in: query
+        name: rfidTid
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: 开始时间
+        in: query
+        name: startTime
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageProductResumeOutputVO'
+      summary: 生产履历分页
+      tags:
+      - 生产履历
+  /mold/quality:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除模具质量
+      tags:
+      - 模具质量
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateQualityVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 添加模具质量
+      tags:
+      - 模具质量
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateQualityVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新模具质量
+      tags:
+      - 模具质量
+  /mold/quality/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageQualityOutVO'
+      summary: 模具质量查看
+      tags:
+      - 模具质量
+  /mold/quality/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 质量编号
+        in: query
+        name: code
+        type: string
+      - description: 录入人
+        in: query
+        name: createdBy
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 不良数量最大值
+        in: query
+        name: defectCountMax
+        type: integer
+      - description: 不良数量最小值
+        in: query
+        name: defectCountMin
+        type: integer
+      - description: 不良描述
+        in: query
+        name: defectDesc
+        type: string
+      - in: query
+        name: id
+        type: integer
+      - description: 线别、模具编号和模具名称模糊查找，该参数有值时忽略其它条件参数
+        in: query
+        name: likeQuery
+        type: string
+      - description: 线别
+        in: query
+        name: lineLevel
+        type: string
+      - description: 模具编号
+        in: query
+        name: moldCode
+        type: string
+      - description: 工单号
+        in: query
+        name: orderCode
+        type: string
+      - description: 模具零件号
+        in: query
+        name: partCodes
+        type: string
+      - description: 生产数量最大值
+        in: query
+        name: productionCountMax
+        type: integer
+      - description: 生产数量最小值
+        in: query
+        name: productionCountMin
+        type: integer
+      - description: 质量内容
+        in: query
+        name: qualityContent
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageQualityOutVO'
+      summary: 模具质量分页
+      tags:
+      - 模具质量
+  /mold/remodel:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除模具改造
+      tags:
+      - 模具改造
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateRemodelVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 添加模具改造
+      tags:
+      - 模具改造
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateRemodelVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新模具改造
+      tags:
+      - 模具改造
+  /mold/remodel/completed:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/IDVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 完工
+      tags:
+      - 模具改造
+  /mold/remodel/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageRemodelOutVO'
+      summary: 模具改造查看
+      tags:
+      - 模具改造
+  /mold/remodel/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 改造编码
+        in: query
+        name: code
+        type: string
+      - description: 改造编码模糊
+        in: query
+        name: codeLike
+        type: string
+      - description: 模具编号和模具名称模糊查找，该参数有值时忽略其它条件参数
+        in: query
+        name: codeOrName
+        type: string
+      - description: 改造内容
+        in: query
+        name: content
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 责任人
+        in: query
+        name: director
+        type: string
+      - description: 改造完成时间
+        in: query
+        name: finishTime
+        type: string
+      - in: query
+        name: id
+        type: integer
+      - description: 是否延期
+        in: query
+        name: isDelay
+        type: string
+      - description: 改造地点
+        in: query
+        name: location
+        type: string
+      - description: 模具编码
+        in: query
+        name: moldCode
+        type: string
+      - description: 改造结束时间Begin
+        in: query
+        name: remodelEndTimeBegin
+        type: string
+      - description: 改造结束时间End
+        in: query
+        name: remodelEndTimeEnd
+        type: string
+      - description: 改造开始时间Begin
+        in: query
+        name: remodelStartTimeBegin
+        type: string
+      - description: 改造开始时间End
+        in: query
+        name: remodelStartTimeEnd
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: 状态
+        in: query
+        name: status
+        type: string
+      - description: 改造类别
+        in: query
+        name: type
+        type: string
+      - description: 撤销原因
+        in: query
+        name: withdrawReason
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageRemodelOutVO'
+      summary: 模具改造分页
+      tags:
+      - 模具改造
+  /mold/remodel/withdraw:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/mold.StatusVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 撤单
+      tags:
+      - 模具改造
+  /mold/repair:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除模具维修
+      tags:
+      - 模具维修
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateRepairVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 添加模具维修
+      tags:
+      - 模具维修
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateRepairVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新模具维修
+      tags:
+      - 模具维修
+  /mold/repair/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageRepairOutVO'
+      summary: 模具维修查看
+      tags:
+      - 模具维修
+  /mold/repair/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 到达时间开始
+        in: query
+        name: arriveTimeBegin
+        type: string
+      - description: 到达时间结束
+        in: query
+        name: arriveTimeEnd
+        type: string
+      - description: 审核-维修工程师
+        in: query
+        name: auditorEngine
+        type: string
+      - description: 审核-生产组长
+        in: query
+        name: auditorProduct
+        type: string
+      - description: 维修编号
+        in: query
+        name: code
+        type: string
+      - description: 维修编码模糊
+        in: query
+        name: codeLike
+        type: string
+      - description: 模具编号和模具名称模糊查找，该参数有值时忽略其它条件参数
+        in: query
+        name: codeOrName
+        type: string
+      - description: 确定人
+        in: query
+        name: confirmor
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 故障描述
+        in: query
+        name: faultDesc
+        type: string
+      - description: 完成时间开始
+        in: query
+        name: finishTimeBegin
+        type: string
+      - description: 完成时间结束
+        in: query
+        name: finishTimeEnd
+        type: string
+      - in: query
+        name: id
+        type: integer
+      - description: 永久改善内容
+        in: query
+        name: improveContent
+        type: string
+      - description: 线别
+        in: query
+        name: lineLevel
+        type: string
+      - description: 锁定人
+        in: query
+        name: lockor
+        type: string
+      - description: 模具编号
+        in: query
+        name: moldCode
+        type: string
+      - description: 操作者
+        in: query
+        name: operator
+        type: string
+      - description: 模具零件号
+        in: query
+        name: partCodes
+        type: string
+      - description: 维修内容
+        in: query
+        name: repairContent
+        type: string
+      - description: 维修等级
+        in: query
+        name: repairLevel
+        type: string
+      - description: 维修工站
+        in: query
+        name: repairStations
+        type: string
+      - description: 维修者
+        in: query
+        name: repairtor
+        type: string
+      - description: 报告时间开始
+        in: query
+        name: reportTimeBegin
+        type: string
+      - description: 报告时间结束
+        in: query
+        name: reportTimeEnd
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: 解锁人
+        in: query
+        name: unlockor
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageRepairOutVO'
+      summary: 模具维修分页
+      tags:
+      - 模具维修
+  /mold/statistics/agv/task:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: AgvTaskVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/AgvTaskVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/AgvTaskScopeVO'
+      summary: AGV任务统计
+      tags:
+      - 首页
+  /mold/statistics/inoutbound/task:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: InOutBoundTaskVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/InOutBoundTaskVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/InOutBoundTaskOutVO'
+      summary: 出入库任务统计
+      tags:
+      - 首页
+  /mold/statistics/maintenance/task:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MoldMaintenanceTaskOutVO'
+      summary: 保养任务统计
+      tags:
+      - 首页
+  /mold/statistics/mold/status:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MoldStatusGroupOutVO'
+      summary: 模具状态统计
+      tags:
+      - 首页
+  /mold/statistics/repair:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MoldExceptionVO'
+      summary: 模具异常汇总
+      tags:
+      - 首页
+  /rtsp/play:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/rtsp.RTSPTransSrv'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: RTSP流转码
+      tags:
+      - RTSP流转码
+  /scrollmsg/get:
+    get:
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"消息内容"}'
+          schema:
+            type: string
+      summary: 查询滚动消息
+      tags:
+      - 滚动消息
+  /scrollmsg/save:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ScrollMessageVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/ScrollMessageVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"保存成功","result":"null"}'
+          schema:
+            type: string
+      summary: 保存滚动消息
+      tags:
+      - 滚动消息
+  /spare:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除备件
+      tags:
+      - 备件
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateSpareVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 添加备件
+      tags:
+      - 备件
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateSpareVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新备件
+      tags:
+      - 备件
+  /spare/excel:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 指定ID导出备件
+        in: query
+        name: ids
+        type: array
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导出
+      tags:
+      - 备件
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: SpareImportParsedVOS
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/SpareImportParsedVOS'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导入解析后的Excel内容
+      tags:
+      - 备件
+  /spare/inbound:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 备件编号
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: 出入库时间开始
+        in: query
+        name: gmtCreatedBegin
+        type: string
+      - description: 出入库时间结束
+        in: query
+        name: gmtCreatedEnd
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SpareRequestRecordOutVO'
+      summary: 备件入库记录查看
+      tags:
+      - 备件库存
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/InboundSpareRequestVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 入库
+      tags:
+      - 备件库存
+  /spare/inbound/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 备件编号
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 出入库时间开始
+        in: query
+        name: gmtCreatedBegin
+        type: string
+      - description: 出入库时间结束
+        in: query
+        name: gmtCreatedEnd
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SpareRequestRecordOutVO'
+      summary: 备件入库记录分页
+      tags:
+      - 备件库存
+  /spare/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageSpareOutVO'
+      summary: 用户备件查看
+      tags:
+      - 备件
+  /spare/outbound:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 备件编号
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: 出入库时间开始
+        in: query
+        name: gmtCreatedBegin
+        type: string
+      - description: 出入库时间结束
+        in: query
+        name: gmtCreatedEnd
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SpareRequestRecordOutVO'
+      summary: 备件出库记录查看
+      tags:
+      - 备件库存
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/OutboundSpareRequestVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 出库
+      tags:
+      - 备件库存
+  /spare/outbound/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 备件编号
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 出入库时间开始
+        in: query
+        name: gmtCreatedBegin
+        type: string
+      - description: 出入库时间结束
+        in: query
+        name: gmtCreatedEnd
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SpareRequestRecordOutVO'
+      summary: 备件出库记录分页
+      tags:
+      - 备件库存
+  /spare/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 备件编号
+        in: query
+        name: code
+        type: string
+      - description: 备件编号和名称模糊查找，该参数有值时忽略其它条件参数
+        in: query
+        name: codeOrName
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 备件规格
+        in: query
+        name: flavor
+        type: string
+      - description: 材质
+        in: query
+        name: material
+        type: string
+      - description: 备件名称
+        in: query
+        name: name
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageSpareOutVO'
+      summary: 用户备件分页
+      tags:
+      - 备件
+  /spare/parse:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 解析Excel文件内容
+      tags:
+      - 备件
+  /spare/replace/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 单号/备件编号
+        in: query
+        name: codeOrName
+        type: string
+      - description: 模具code
+        in: query
+        name: moldCode
+        required: true
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 每页数量
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageMoldMaintenanceOutVO'
+      summary: 备件更换履历分页
+      tags:
+      - 备件更换履历
+  /spare/request:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 备件编码
+        in: query
+        name: code
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageSpareRequestOutVO'
+      summary: 备件库存查看
+      tags:
+      - 备件库存
+  /spare/request/excel:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导出全部
+      tags:
+      - 备件库存
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: SpareRequestImportParsedVOS
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/SpareRequestImportParsedVOS'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导入解析后的Excel内容
+      tags:
+      - 备件库存
+  /spare/request/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 备件编号和名称模糊查找，该参数有值时忽略其它条件参数
+        in: query
+        name: codeOrName
+        type: string
+      - description: 出入库数量
+        in: query
+        name: count
+        type: integer
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 出入库位置
+        in: query
+        name: location
+        type: string
+      - description: 每页条数
+        in: query
+        name: size
+        type: integer
+      - description: 备件编号
+        in: query
+        name: spareCode
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PageSpareRequestOutVO'
+      summary: 备件库存分页
+      tags:
+      - 备件库存
+  /spare/request/parse:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 解析Excel文件内容
+      tags:
+      - 备件库存
+  /spare/resume/excel:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导出
+      tags:
+      - 备件履历
+  /spare/resume/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: SpareResumePageQueryVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/SpareResumePageQueryVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SpareResumePageVO'
+      summary: 分页
+      tags:
+      - 备件履历
+  /sterescopic/inside/mold/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: StereoscopicInsideMoldPageQueryVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/StereoscopicInsideMoldPageQueryVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/StereoscopicInsideMoldPageVO'
+      summary: 可出库模具查询
+      tags:
+      - 模具立库
+  /sterescopic/job/detail/list:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: common.IDVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/IDVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MoldInoutBoundJobDetail'
+      summary: 模具出入库任务详情列表
+      tags:
+      - 模具立库
+  /sterescopic/job/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: StereoscopicJobPageQueryVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/StereoscopicJobPageQueryVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MoldInOutBoundJobVO'
+      summary: 模具出入库任务分页
+      tags:
+      - 模具立库
+  /sterescopic/location:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: StereoscopicLocationUpdateVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/StereoscopicLocationUpdateVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 模具立库管理更新
+      tags:
+      - 模具立库
+  /sterescopic/location/all:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/StereoscopicLocationAllVO'
+      summary: 模具立库全量查询
+      tags:
+      - 模具立库
+  /sterescopic/location/count:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/StereoscopicLocationCountVO'
+      summary: 模具立库储位统计
+      tags:
+      - 模具立库
+  /sterescopic/location/export:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 指定ID导出立库储位信息
+        in: query
+        name: ids
+        type: array
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 导出
+      tags:
+      - 模具立库
+  /sterescopic/location/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: StereoscopicLocationPageQueryVO
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/StereoscopicLocationPageQueryVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/StereoscopicLocationPageVO'
+      summary: 模具立库管理分页
+      tags:
+      - 模具立库
+  /sterescopic/outside/mold/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: StereoscopicOutsideMoldPageQueryVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/StereoscopicOutsideMoldPageQueryVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/StereoscopicOutsideMoldPageVO'
+      summary: 可入库模具查询
+      tags:
+      - 模具立库
+  /sterescopic/uninbound/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: StereoscopicUnInboundMoldPageQueryVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/StereoscopicUnInboundMoldPageQueryVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/StereoscopicUnInboundMoldPageVO'
+      summary: 未入库模具分页
+      tags:
+      - 模具立库
+  /sterescopic/wait/maintenance/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: StereoscopicWaitMaintenanceMoldPageQueryVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/StereoscopicWaitMaintenanceMoldPageQueryVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/StereoscopicWaitMaintenanceMoldPageVO'
+      summary: 待保养模具分页
+      tags:
+      - 模具立库
+  /sterescopic/wait/remodel/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: StereoscopicWaitRemodelMoldPageQueryVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/StereoscopicWaitRemodelMoldPageQueryVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/StereoscopicWaitRemodelPageVO'
+      summary: 待改造模具分页
+      tags:
+      - 模具立库
+  /template:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 模块：模具mold，备件spare，库存spare_request,模具BOM:mold_bom
+        in: query
+        name: module
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 下载导入模板
+      tags:
+      - Excel模板
+  /test/maintenance/task/history:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: FixMaintenanceTaskRequestVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/FixMaintenanceTaskRequestVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 修复填充保养任务记录
+      tags:
+      - 修复填充保养任务记录(因为删除保养任务导致保养任务历史记录一致性被破坏)
+  /test/mqtt/mock:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/MockProductDataVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+      summary: 模拟MQTT发送生产数据,生成任务测试用
+      tags:
+      - 对接测试相关接口
+  /test/pd/wms/request:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: PdWMSRequestVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/PdWMSRequestVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PdWMSRequestResponseVO'
+      summary: MOULD_Pd_WMS_Request中间表
+      tags:
+      - 对接测试WMS系统相关接口
+  /test/plc/read:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: PlcReadVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/PlcReadVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: 读立库PLC库信息
+      tags:
+      - 对接测试相关接口
+  /test/plc/write:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: PlcWriteVO
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/PlcWriteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: 写立库PLC库信息
+      tags:
+      - 对接测试相关接口
+  /user:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 删除用户
+      tags:
+      - 用户管理
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 姓名或者工号
+        in: query
+        name: name
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 用户列表
+      tags:
+      - 用户管理
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateUserVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 添加用户
+      tags:
+      - 用户管理
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateUserVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新用户
+      tags:
+      - 用户管理
+  /user/authorities:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 获取所有可配置的权限
+      tags:
+      - 权限
+  /user/authority:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 获取当前登录用户权限编码
+      tags:
+      - 权限
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateUserAuthorityVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 更新指定用户权限
+      tags:
+      - 权限
+  /user/authority/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户登录名
+        in: query
+        name: loginName
+        required: true
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 获取指定用户权限编码,管理员only
+      tags:
+      - 权限
+  /user/encrypt:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/EncryptPassWordVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 密码加密
+      tags:
+      - 登录
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/LoginVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 用户登录
+      tags:
+      - 登录
+  /user/logout:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 登出当前用户
+      tags:
+      - 登录
+  /user/one:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: loginName
+        in: query
+        name: loginName
+        type: string
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 查询单个用户信息,管理员only
+      tags:
+      - 用户管理
+  /user/page:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 姓名或者工号
+        in: query
+        name: name
+        type: string
+      - description: 当前页
+        in: query
+        name: currentPage
+        type: integer
+      - description: 每页数量
+        in: query
+        name: size
+        type: integer
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 用户分页
+      tags:
+      - 用户管理
+  /user/pwd:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/ModifyPasswordVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 修改当前用户密码
+      tags:
+      - 用户管理
+  /user/reset:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/LoginVO'
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 重置密码,only管理员
+      tags:
+      - 用户管理
+  /user/rsa:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 获取rsa公钥
+      tags:
+      - 登录
+  /user/self:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Token
+        in: header
+        name: AuthToken
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"message":"请求成功","result":"null"}'
+          schema:
+            type: string
+      summary: 查询当前登录用户信息
+      tags:
+      - 用户管理
+swagger: "2.0"
