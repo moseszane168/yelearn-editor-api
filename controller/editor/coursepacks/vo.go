@@ -15,20 +15,20 @@ type CreateCoursePackVO struct {
 	Cover       string    `json:"cover" binding:"required"`       // 封面
 	Title       string    `json:"title" binding:"required"`       // 标题
 	Description string    `json:"description" binding:"required"` // 描述
-	Id          string    `json:"id" binding:"required"`          // 主键id
+	Id          string    `json:"id"`                             // 主键id
 } // @name CreateCoursePackVO
 
 type UpdateCoursePackVO struct {
-	IsFree      bool      `json:"isFree"`                         //
-	Order       int       `json:"order"`                          //
-	CreatedAt   time.Time `json:"createdAt"`                      //
-	UpdatedAt   time.Time `json:"updatedAt"`                      //
-	CreatorId   string    `json:"creatorId"`                      //
-	ShareLevel  string    `json:"shareLevel"`                     //
-	Cover       string    `json:"cover" binding:"required"`       // 封面
-	Title       string    `json:"title" binding:"required"`       // 标题
-	Description string    `json:"description" binding:"required"` // 描述
-	Id          string    `json:"id" binding:"required"`          // 主键id
+	IsFree      bool      `json:"isFree"`                //
+	Order       int       `json:"order"`                 //
+	CreatedAt   time.Time `json:"createdAt"`             //
+	UpdatedAt   time.Time `json:"updatedAt"`             //
+	CreatorId   string    `json:"creatorId"`             //
+	ShareLevel  string    `json:"shareLevel"`            //
+	Cover       string    `json:"cover"`                 // 封面
+	Title       string    `json:"title"`                 // 标题
+	Description string    `json:"description"`           // 描述
+	Id          string    `json:"id" binding:"required"` // 主键id
 } // @name UpdateCoursePackVO
 
 type PageCoursePackVO struct {
@@ -70,3 +70,10 @@ type CoursePackOutVO struct {
 	Description string    `json:"description" binding:"required"` // 描述
 	Id          string    `json:"id" binding:"required"`          // 主键id
 } // @name CoursePackOutVO
+
+type FileOutVO struct {
+	//BucketName string `json:"bucketName"`
+	//FileKey    string `json:"fileKey"`
+	//FileName   string `json:"fileName"`
+	FilePath string `json:"filePath"`
+} // @name FileOutVO

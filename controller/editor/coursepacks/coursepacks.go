@@ -6,11 +6,14 @@ import (
 	"crf-mold/common/constant"
 	"crf-mold/dao"
 	"crf-mold/model/earthworm"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"io"
 	"net/http"
-	"strconv"
+	"path/filepath"
+	"strings"
+	"time"
 )
 
 // @Tags 课程包
@@ -57,7 +60,11 @@ func CreateCoursePack(c *gin.Context) {
 	coursePack.Id = base.GenerateUniqueTextID()
 
 	// 新增
-	dao.GetConn().Table("course_packs").Create(&coursePack)
+	errCreate := dao.GetConn().Table("course_packs").
+		Create(&coursePack).Error
+	if errCreate != nil {
+		panic(base.ParamsError(errCreate.Error()))
+	}
 
 	c.JSON(http.StatusOK, base.Success(coursePack.Id))
 }
@@ -71,18 +78,20 @@ func CreateCoursePack(c *gin.Context) {
 // @Success 200 {object} bool
 // @Router /editor/course-pack [delete]
 func DeleteCoursePack(c *gin.Context) {
-	idstr := c.Query("id")
-	id, err := strconv.Atoi(idstr)
-	if err != nil {
+	id := c.Query("id")
+	if id == "" {
 		panic(base.ParamsErrorN())
 	}
 
 	//userId := c.GetHeader(constant.USERID)
 
 	var coursePack earthworm.CoursePacks
-	dao.GetConn().Table("course_packs").
+	errDelete := dao.GetConn().Table("course_packs").
 		Where("id = ?", id).
-		Delete(&coursePack)
+		Delete(&coursePack).Error
+	if errDelete != nil {
+		panic(base.ParamsError(errDelete.Error()))
+	}
 
 	c.JSON(http.StatusOK, base.Success(true))
 }
@@ -115,8 +124,12 @@ func UpdateCoursePack(c *gin.Context) {
 	var coursePack earthworm.CoursePacks
 	base.CopyProperties(&coursePack, vo)
 
-	dao.GetConn().Table("course_packs").
-		Updates(&coursePack)
+	errUpdates := dao.GetConn().Table("course_packs").
+		Where("id = ?", vo.Id).
+		Updates(&coursePack).Error
+	if errUpdates != nil {
+		panic(base.ParamsError(errUpdates.Error()))
+	}
 
 	c.JSON(http.StatusOK, base.Success(true))
 }
@@ -125,21 +138,20 @@ func UpdateCoursePack(c *gin.Context) {
 // @Summary 课程包列表
 // @Accept json
 // @Produce json
-// @Param id query int true "id"
 // @Param AuthToken header string false "Token"
 // @Success 200 {object} earthworm.CoursePacks
 // @Router /editor/course-packs [get]
 func ListCoursePack(c *gin.Context) {
-	id := c.Query("id")
+	var coursePacks []earthworm.CoursePacks
+	errFind := dao.GetConn().Table("course_packs").
+		//Order("`ORDER` DESC").
+		Find(&coursePacks).Error
+	if errFind != nil {
+		panic(base.ParamsErrorN())
+	}
 
-	var results []earthworm.CoursePacks
-	tx := dao.GetConn().Table("course_packs").
-		Where("id = ?", id)
-
-	tx.Order("`gmt_created` desc").Find(&results)
-
-	if len(results) > 0 {
-		c.JSON(http.StatusOK, base.Success(results))
+	if len(coursePacks) > 0 {
+		c.JSON(http.StatusOK, base.Success(coursePacks))
 	} else {
 		c.JSON(http.StatusOK, base.Success([]earthworm.CoursePacks{}))
 	}
@@ -213,22 +225,58 @@ func PageCoursePack(c *gin.Context) {
 // @Success 200 {object} earthworm.CoursePacks
 // @Router /editor/course-pack [get]
 func OneCoursePack(c *gin.Context) {
-	idStr := c.Query("id")
-	if idStr == "" {
-		panic(base.ParamsErrorN())
-	}
-
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
+	id := c.Query("id")
+	if id == "" {
 		panic(base.ParamsErrorN())
 	}
 
 	var coursePack earthworm.CoursePacks
-	if err := dao.GetConn().Table("course_packs").
+	errFirst := dao.GetConn().Table("course_packs").
 		Where("id = ?", id).
-		First(&coursePack).Error; err != nil {
+		First(&coursePack).Error
+	if errFirst != nil {
 		panic(base.ParamsErrorN())
 	}
 
 	c.JSON(http.StatusOK, base.Success(coursePack))
+}
+
+// 随机生成文件名
+func RandomFileName(fileName string) string {
+	prefixIndex := strings.LastIndex(fileName, ".")
+	// 后缀 .xxx
+	lastfix := fileName[prefixIndex:]
+	return base.UUID() + lastfix
+}
+
+// @Tags 文件
+// @Summary 文件上传
+// @Accept json
+// @Produce json
+// @Param file formData file true "文件"
+// @Param AuthToken header string false "Token"
+// @Success 200 {object} file.FileOutVO
+// @Router /file [post]
+func UploadCover(c *gin.Context) {
+	file, err := c.FormFile("file")
+	if err != nil {
+		panic(base.ParamsErrorN())
+	}
+
+	// 生成唯一的文件名
+	filename := fmt.Sprintf("%d%s", time.Now().UnixNano(), filepath.Ext(file.Filename))
+
+	// 保存上传的文件到本地
+	savePath := filepath.Join(".\\uploads", filename)
+	if err := c.SaveUploadedFile(file, savePath); err != nil {
+		panic(base.ParamsError(err.Error()))
+	}
+
+	// 返回文件访问路径
+	filePath := fmt.Sprintf("/uploads/%s", filename)
+
+	// 返回Key
+	c.JSON(http.StatusOK, base.Success(&FileOutVO{
+		FilePath: filePath,
+	}))
 }
