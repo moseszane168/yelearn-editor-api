@@ -136,8 +136,15 @@ func UpdateCourse(c *gin.Context) {
 // @Success 200 {object} earthworm.Courses
 // @Router /editor/course [get]
 func ListCourse(c *gin.Context) {
+	var vo ListCourseVO
+	// 传参有误
+	if err := c.ShouldBindBodyWith(&vo, binding.JSON); err != nil {
+		panic(base.ParamsError(err.Error()))
+	}
+
 	var courses []earthworm.Courses
 	errFind := dao.GetConn().Table("courses").
+		Where("course_pack_id = ?", vo.CoursePackId).
 		//Order("`ORDER` desc").
 		Find(&courses).Error
 	if errFind != nil {
