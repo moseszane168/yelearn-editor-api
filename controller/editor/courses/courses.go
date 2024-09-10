@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"io"
 	"net/http"
-	"strconv"
 )
 
 // @Tags 课程
@@ -47,14 +46,18 @@ func CreateCourse(c *gin.Context) {
 	course.Order = 1
 	//course.CreatedAt = CreatedAt
 	//course.UpdatedAt = UpdatedAt
-	course.CoursePackId = "public"
-	course.Video = ""
+	course.CoursePackId = vo.CoursePackId
+	//course.Video = ""
 	course.Title = vo.Title
 	course.Description = vo.Description
 	course.Id = base.GenerateUniqueTextID()
 
 	// 新增
-	dao.GetConn().Table("courses").Create(&course)
+	errCreate := dao.GetConn().Table("courses").
+		Create(&course).Error
+	if errCreate != nil {
+		panic(base.ParamsError(errCreate.Error()))
+	}
 
 	c.JSON(http.StatusOK, base.Success(course.Id))
 }
@@ -68,18 +71,20 @@ func CreateCourse(c *gin.Context) {
 // @Success 200 {object} bool
 // @Router /editor/course [delete]
 func DeleteCourse(c *gin.Context) {
-	idstr := c.Query("id")
-	id, err := strconv.Atoi(idstr)
-	if err != nil {
+	id := c.Query("id")
+	if id == "" {
 		panic(base.ParamsErrorN())
 	}
 
 	//userId := c.GetHeader(constant.USERID)
 
 	var course earthworm.Courses
-	dao.GetConn().Table("courses").
+	errDelete := dao.GetConn().Table("courses").
 		Where("id = ?", id).
-		Delete(&course)
+		Delete(&course).Error
+	if errDelete != nil {
+		panic(base.ParamsError(errDelete.Error()))
+	}
 
 	c.JSON(http.StatusOK, base.Success(true))
 }
@@ -112,8 +117,12 @@ func UpdateCourse(c *gin.Context) {
 	var course earthworm.Courses
 	base.CopyProperties(&course, vo)
 
-	dao.GetConn().Table("courses").
-		Updates(&course)
+	errUpdates := dao.GetConn().Table("courses").
+		Where("id = ?", vo.Id).
+		Updates(&course).Error
+	if errUpdates != nil {
+		panic(base.ParamsError(errUpdates.Error()))
+	}
 
 	c.JSON(http.StatusOK, base.Success(true))
 }
@@ -127,16 +136,16 @@ func UpdateCourse(c *gin.Context) {
 // @Success 200 {object} earthworm.Courses
 // @Router /editor/course [get]
 func ListCourse(c *gin.Context) {
-	id := c.Query("id")
+	var courses []earthworm.Courses
+	errFind := dao.GetConn().Table("courses").
+		//Order("`ORDER` desc").
+		Find(&courses).Error
+	if errFind != nil {
+		panic(base.ParamsError(errFind.Error()))
+	}
 
-	var results []earthworm.Courses
-	tx := dao.GetConn().Table("courses").
-		Where("id = ?", id)
-
-	tx.Order("`gmt_created` desc").Find(&results)
-
-	if len(results) > 0 {
-		c.JSON(http.StatusOK, base.Success(results))
+	if len(courses) > 0 {
+		c.JSON(http.StatusOK, base.Success(courses))
 	} else {
 		c.JSON(http.StatusOK, base.Success([]earthworm.Courses{}))
 	}
@@ -210,24 +219,20 @@ func PageCourse(c *gin.Context) {
 // @Success 200 {object} earthworm.Courses
 // @Router /editor/course-pack [get]
 func OneCourse(c *gin.Context) {
-	idStr := c.Query("id")
-	if idStr == "" {
+	id := c.Query("id")
+	if id == "" {
 		panic(base.ParamsErrorN())
 	}
 
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		panic(base.ParamsErrorN())
-	}
-
-	var coursePack earthworm.Courses
-	if err := dao.GetConn().Table("courses").
+	var course earthworm.Courses
+	errFirst := dao.GetConn().Table("courses").
 		Where("id = ?", id).
-		First(&coursePack).Error; err != nil {
-		panic(base.ParamsErrorN())
+		First(&course).Error
+	if errFirst != nil {
+		panic(base.ParamsError(errFirst.Error()))
 	}
 
 	// todo 课程包详情
 
-	c.JSON(http.StatusOK, base.Success(coursePack))
+	c.JSON(http.StatusOK, base.Success(course))
 }
