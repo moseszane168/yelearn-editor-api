@@ -6,29 +6,33 @@ import (
 )
 
 type CreateStatementVO struct {
-	Order     int       `json:"order"`                        //
-	CreatedAt time.Time `json:"createdAt"`                    //
-	UpdatedAt time.Time `json:"updatedAt"`                    //
-	Id        string    `json:"id" binding:"required"`        // 主键id
-	CourseId  string    `json:"courseId" binding:"required"`  // 课程id
-	SoundMark string    `json:"soundMark" binding:"required"` // 音标
-	Chinese   string    `json:"chinese" binding:"required"`   // 中文
-	English   string    `json:"english" binding:"required"`   // 英文
-	PId       string    `json:"pid" binding:"required"`       // 父id
+	Order     int       `json:"order"`                       //
+	CreatedAt time.Time `json:"createdAt"`                   //
+	UpdatedAt time.Time `json:"updatedAt"`                   //
+	Id        string    `json:"id"`                          // 主键id
+	CourseId  string    `json:"courseId" binding:"required"` // 课程id
+	SoundMark string    `json:"soundMark"`                   // 音标
+	Chinese   string    `json:"chinese"`                     // 中文
+	English   string    `json:"english" binding:"required"`  // 英文
+	Pid       string    `json:"pid"`                         // 父id
 } // @name CreateStatementVO
 
 type UpdateStatementVO struct {
-	Order     int       `json:"order"`                        //
-	CreatedAt time.Time `json:"createdAt"`                    //
-	UpdatedAt time.Time `json:"updatedAt"`                    //
-	Id        string    `json:"id" binding:"required"`        // 主键id
-	Video     string    `json:"video"`                        //
-	CourseId  string    `json:"courseId" binding:"required"`  // 课程id
-	SoundMark string    `json:"soundMark" binding:"required"` // 音标
-	Chinese   string    `json:"chinese" binding:"required"`   // 中文
-	English   string    `json:"english" binding:"required"`   // 英文
-	PId       string    `json:"pid" binding:"required"`       // 父id
+	Order     int       `json:"order"`                 //
+	CreatedAt time.Time `json:"createdAt"`             //
+	UpdatedAt time.Time `json:"updatedAt"`             //
+	Id        string    `json:"id" binding:"required"` // 主键id
+	Video     string    `json:"video"`                 //
+	CourseId  string    `json:"courseId"`              // 课程id
+	SoundMark string    `json:"soundMark"`             // 音标
+	Chinese   string    `json:"chinese"`               // 中文
+	English   string    `json:"english"`               // 英文
+	Pid       string    `json:"pid"`                   // 父id
 } // @name UpdateStatementVO
+
+type ListStatementVO struct {
+	CourseId string `json:"courseId" binding:"required"` // 课程id
+} // @name ListStatementVO
 
 type PageStatementVO struct {
 	base.PageVO

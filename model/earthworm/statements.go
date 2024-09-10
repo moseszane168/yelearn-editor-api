@@ -14,5 +14,5 @@ type Statements struct {
 	Soundmark string    `json:"soundmark" db:"soundmark"`
 	Chinese   string    `json:"chinese" db:"chinese"`
 	English   string    `json:"english" db:"english"`
-	PId       string    `json:"pid" db:"pid"`
+	Pid       string    `json:"pid" db:"pid"`
 }

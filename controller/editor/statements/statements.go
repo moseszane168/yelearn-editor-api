@@ -14,7 +14,6 @@ import (
 	"gorm.io/gorm"
 	"io"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -53,14 +52,18 @@ func CreateStatement(c *gin.Context) {
 	statement.Order = 1
 	//statement.CreatedAt = CreatedAt
 	//statement.UpdatedAt = UpdatedAt
-	statement.CourseId = "public"
-	statement.Soundmark = ""
-	statement.Chinese = vo.Chinese
+	statement.CourseId = vo.CourseId
+	//statement.Soundmark = vo.SoundMark
+	//statement.Chinese = vo.Chinese
 	statement.English = vo.English
 	statement.Id = base.GenerateUniqueTextID()
 
 	// 新增
-	dao.GetConn().Table("statements").Create(&statement)
+	errCreate := dao.GetConn().Table("statements").
+		Create(&statement).Error
+	if errCreate != nil {
+		panic(base.ParamsError(errCreate.Error()))
+	}
 
 	c.JSON(http.StatusOK, base.Success(statement.Id))
 }
@@ -74,18 +77,20 @@ func CreateStatement(c *gin.Context) {
 // @Success 200 {object} bool
 // @Router /editor/statement [delete]
 func DeleteStatement(c *gin.Context) {
-	idstr := c.Query("id")
-	id, err := strconv.Atoi(idstr)
-	if err != nil {
+	id := c.Query("id")
+	if id == "" {
 		panic(base.ParamsErrorN())
 	}
 
 	//userId := c.GetHeader(constant.USERID)
 
 	var statement earthworm.Statements
-	dao.GetConn().Table("statements").
+	errDelete := dao.GetConn().Table("statements").
 		Where("id = ?", id).
-		Delete(&statement)
+		Delete(&statement).Error
+	if errDelete != nil {
+		panic(base.ParamsError(errDelete.Error()))
+	}
 
 	c.JSON(http.StatusOK, base.Success(true))
 }
@@ -118,8 +123,12 @@ func UpdateStatement(c *gin.Context) {
 	var statement earthworm.Statements
 	base.CopyProperties(&statement, vo)
 
-	dao.GetConn().Table("statements").
-		Updates(&statement)
+	errUpdates := dao.GetConn().Table("statements").
+		Where("id = ?", vo.Id).
+		Updates(&statement).Error
+	if errUpdates != nil {
+		panic(base.ParamsError(errUpdates.Error()))
+	}
 
 	c.JSON(http.StatusOK, base.Success(true))
 }
@@ -133,16 +142,24 @@ func UpdateStatement(c *gin.Context) {
 // @Success 200 {object} earthworm.Statements
 // @Router /editor/statements [get]
 func ListStatement(c *gin.Context) {
-	id := c.Query("id")
+	var vo ListStatementVO
+	// 传参有误
+	if err := c.ShouldBindBodyWith(&vo, binding.JSON); err != nil {
+		panic(base.ParamsError(err.Error()))
+	}
 
-	var results []earthworm.Statements
-	tx := dao.GetConn().Table("statements").
-		Where("id = ?", id)
+	var statement []earthworm.Statements
+	errFind := dao.GetConn().Table("statements").
+		Where("course_id = ?", vo.CourseId).
+		Where("pid = ?", "").
+		//Order("`order` desc").
+		Find(&statement).Error
+	if errFind != nil {
+		panic(base.ParamsError(errFind.Error()))
+	}
 
-	tx.Order("`gmt_created` desc").Find(&results)
-
-	if len(results) > 0 {
-		c.JSON(http.StatusOK, base.Success(results))
+	if len(statement) > 0 {
+		c.JSON(http.StatusOK, base.Success(statement))
 	} else {
 		c.JSON(http.StatusOK, base.Success([]earthworm.Courses{}))
 	}
@@ -216,21 +233,17 @@ func PageStatement(c *gin.Context) {
 // @Success 200 {object} earthworm.Statements
 // @Router /editor/course-pack [get]
 func OneStatement(c *gin.Context) {
-	idStr := c.Query("id")
-	if idStr == "" {
-		panic(base.ParamsErrorN())
-	}
-
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
+	id := c.Query("id")
+	if id == "" {
 		panic(base.ParamsErrorN())
 	}
 
 	var statement earthworm.Statements
-	if err := dao.GetConn().Table("statements").
+	errFirst := dao.GetConn().Table("statements").
 		Where("id = ?", id).
-		First(&statement).Error; err != nil {
-		panic(base.ParamsErrorN())
+		First(&statement).Error
+	if errFirst != nil {
+		panic(base.ParamsError(errFirst.Error()))
 	}
 
 	// todo 课程详情
@@ -369,7 +382,7 @@ func SplitStatement(c *gin.Context) {
 			for _, statement := range statements {
 				var statementCreate earthworm.Statements
 				statementCreate.Id = base.GenerateUniqueTextID()
-				statementCreate.PId = statementFirst.Id
+				statementCreate.Pid = statementFirst.Id
 				statementCreate.CourseId = vo.CourseId
 				statementCreate.Chinese = statement.Chinese
 				statementCreate.English = statement.English
