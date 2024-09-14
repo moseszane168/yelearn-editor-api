@@ -77,16 +77,21 @@ func CreateStatement(c *gin.Context) {
 // @Success 200 {object} bool
 // @Router /editor/statement [delete]
 func DeleteStatement(c *gin.Context) {
-	id := c.Query("id")
-	if id == "" {
-		panic(base.ParamsErrorN())
+	var vo DeleteStatementVO
+	// 传参有误
+	if err := c.ShouldBindBodyWith(&vo, binding.JSON); err != nil {
+		panic(base.ParamsError(err.Error()))
+	}
+
+	if len(vo.StatementIds) == 0 {
+		panic(base.ParamsError("all"))
 	}
 
 	//userId := c.GetHeader(constant.USERID)
 
 	var statement earthworm.Statements
 	errDelete := dao.GetConn().Table("statements").
-		Where("id = ?", id).
+		Where("id in ?", vo.StatementIds).
 		Delete(&statement).Error
 	if errDelete != nil {
 		panic(base.ParamsError(errDelete.Error()))
@@ -268,6 +273,10 @@ func SplitStatement(c *gin.Context) {
 		panic(base.ParamsError(err.Error()))
 	}
 
+	if len(vo.StatementIds) == 0 {
+		panic(base.ParamsError("all"))
+	}
+
 	content := "请注意，我将给你发送一些英文句子，你需要将英文句子拆分成单词和短语句子，按照以下顺序拆分：" +
 		"1. 拆分出句子中第一个短句里的每个单词。" +
 		"2. 将第一个短句的所有单词组合成一个短句。" +
@@ -299,7 +308,8 @@ func SplitStatement(c *gin.Context) {
 		"示例2:it is not important so i don't need to do it today." +
 		"拆分为：it, is, it is, not, important, not important, it is not important, so ,I ,so I, don’t ,need ,don’t need, " +
 		"to, do ,it ,to do it, today, it is not important so i don't need to do it today." +
-		"如果你明白了，请将以下句子输出：" + vo.Statement
+		"如果你明白了，请将以下句子输出："
+	//+ vo.Statement
 
 	//content = "You are a helpful assistant."
 

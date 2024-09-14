@@ -75,10 +75,16 @@ type StatementOutVO struct {
 } // @name StatementOutVO
 
 type SplitStatementVO struct {
-	CourseId  string `json:"courseId" binding:"required"`  // 课程id
-	Statement string `json:"statement" binding:"required"` // 句子
-	//StatementIds []string `json:"statementIds" binding:"required"` // 句子ids
+	CourseId string `json:"courseId" binding:"required"` // 课程id
+	//Statement string `json:"statement" binding:"required"` // 句子
+	StatementIds []string `json:"statementIds"` // 句子ids
 } // @name StatementOutVO
+
+type DeleteStatementVO struct {
+	CourseId string `json:"courseId" binding:"required"` // 课程id
+	//Statement string `json:"statement" binding:"required"` // 句子
+	StatementIds []string `json:"statementIds"` // 句子ids
+} // @name DeleteStatementVO
 
 type DeepSeekRequest struct {
 	Model    string    `json:"model"`
