@@ -22,14 +22,14 @@ func InitRoute(r *gin.Engine) {
 		v1.POST("/editor/course", courses.CreateCourse)   // 新增课程
 		v1.DELETE("/editor/course", courses.DeleteCourse) // 删除课程
 		v1.PUT("/editor/course", courses.UpdateCourse)    // 更新课程
-		v1.GET("/editor/courses", courses.ListCourse)     // 课程列表
+		v1.POST("/editor/courses", courses.ListCourse)    // 课程列表
 		v1.GET("/editor/course", courses.OneCourse)       //课程查看
 
 		// 句子
 		v1.POST("/editor/statement", statements.CreateStatement)      // 新增句子
 		v1.DELETE("/editor/statement", statements.DeleteStatement)    // 删除句子
 		v1.PUT("/editor/statement", statements.UpdateStatement)       // 更新句子
-		v1.GET("/editor/statements", statements.ListStatement)        // 句子列表
+		v1.POST("/editor/statements", statements.ListStatement)       // 句子列表
 		v1.GET("/editor/statement", statements.OneStatement)          // 句子查看
 		v1.POST("/editor/split-statement", statements.SplitStatement) // 拆分句子
 

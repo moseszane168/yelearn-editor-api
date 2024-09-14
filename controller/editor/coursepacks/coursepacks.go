@@ -273,7 +273,7 @@ func UploadCover(c *gin.Context) {
 	}
 
 	// 返回文件访问路径
-	filePath := fmt.Sprintf("/uploads/%s", filename)
+	filePath := fmt.Sprintf("http://127.0.0.1:8081/uploads/%s", filename)
 
 	// 返回Key
 	c.JSON(http.StatusOK, base.Success(&FileOutVO{

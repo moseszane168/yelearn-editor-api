@@ -40,6 +40,9 @@ func main() {
 	// 初始化gin
 	r := gin.New()
 
+	// 设置静态文件服务
+	r.Static("/uploads", "./uploads")
+
 	// 引入swagger
 	docs.SwaggerInfo.BasePath = "/v1" // 根路径
 	url := ginSwagger.URL("/swagger/doc.json")
