@@ -273,9 +273,38 @@ func SplitStatement(c *gin.Context) {
 		panic(base.ParamsError(err.Error()))
 	}
 
+	var sentences []earthworm.Statements
 	if len(vo.StatementIds) == 0 {
-		panic(base.ParamsError("all"))
+		// todo 查出该课程所有句子
+		errFind := dao.GetConn().Table("statements").
+			Where("course_id = ?", vo.CourseId).
+			Where("pid = ?", "").
+			//Order("`order` desc").
+			Find(&sentences).Error
+		if errFind != nil {
+			panic(base.ParamsError(errFind.Error()))
+		}
+	} else {
+		// todo 查出该句子
+		errFind := dao.GetConn().Table("statements").
+			Where("course_id = ?", vo.CourseId).
+			Where("id in ?", vo.StatementIds).
+			//Order("`order` desc").
+			Find(&sentences).Error
+		if errFind != nil {
+			panic(base.ParamsError(errFind.Error()))
+		}
 	}
+
+	if len(sentences) == 0 {
+		panic(base.ParamsError("请添加句子"))
+	}
+
+	var sentencesSlice []string
+	for i, _ := range sentences {
+		sentencesSlice = append(sentencesSlice, sentences[i].English+".")
+	}
+	sentencesStr := strings.Join(sentencesSlice, "")
 
 	content := "请注意，我将给你发送一些英文句子，你需要将英文句子拆分成单词和短语句子，按照以下顺序拆分：" +
 		"1. 拆分出句子中第一个短句里的每个单词。" +
@@ -308,8 +337,7 @@ func SplitStatement(c *gin.Context) {
 		"示例2:it is not important so i don't need to do it today." +
 		"拆分为：it, is, it is, not, important, not important, it is not important, so ,I ,so I, don’t ,need ,don’t need, " +
 		"to, do ,it ,to do it, today, it is not important so i don't need to do it today." +
-		"如果你明白了，请将以下句子输出："
-	//+ vo.Statement
+		"如果你明白了，请将以下句子输出：" + sentencesStr
 
 	//content = "You are a helpful assistant."
 
