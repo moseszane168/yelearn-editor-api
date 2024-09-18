@@ -83,19 +83,25 @@ func DeleteStatement(c *gin.Context) {
 		panic(base.ParamsError(err.Error()))
 	}
 
+	var statement earthworm.Statements
 	if len(vo.StatementIds) == 0 {
-		panic(base.ParamsError("all"))
+		errDelete := dao.GetConn().Table("statements").
+			Where("course_id = ?", vo.CourseId).
+			Delete(&statement).Error
+		if errDelete != nil {
+			panic(base.ParamsError(errDelete.Error()))
+		}
+	} else {
+		errDelete := dao.GetConn().Table("statements").
+			Where("course_id = ?", vo.CourseId).
+			Where("id in ?", vo.StatementIds).
+			Delete(&statement).Error
+		if errDelete != nil {
+			panic(base.ParamsError(errDelete.Error()))
+		}
 	}
 
 	//userId := c.GetHeader(constant.USERID)
-
-	var statement earthworm.Statements
-	errDelete := dao.GetConn().Table("statements").
-		Where("id in ?", vo.StatementIds).
-		Delete(&statement).Error
-	if errDelete != nil {
-		panic(base.ParamsError(errDelete.Error()))
-	}
 
 	c.JSON(http.StatusOK, base.Success(true))
 }
