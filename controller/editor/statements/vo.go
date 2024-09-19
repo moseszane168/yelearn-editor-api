@@ -2,6 +2,7 @@ package statements
 
 import (
 	"crf-mold/base"
+	"crf-mold/model/earthworm"
 	"time"
 )
 
@@ -31,7 +32,8 @@ type UpdateStatementVO struct {
 } // @name UpdateStatementVO
 
 type ListStatementVO struct {
-	CourseId string `json:"courseId" binding:"required"` // 课程id
+	CourseId    string `json:"courseId" binding:"required"` // 课程id
+	StatementId string `json:"statementId"`                 // 句子id
 } // @name ListStatementVO
 
 type PageStatementVO struct {
@@ -128,4 +130,8 @@ type Statement struct {
 type SentenceData struct {
 	Sentence   string      `json:"sentence"`
 	Statements []Statement `json:"statements"`
+}
+
+type Sentences struct {
+	Pid []earthworm.Statements
 }

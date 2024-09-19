@@ -3,14 +3,12 @@ package statements
 import (
 	"bytes"
 	"crf-mold/base"
-	restclient "crf-mold/common/http"
 	"crf-mold/dao"
 	"crf-mold/model/earthworm"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"io"
 	"net/http"
@@ -159,20 +157,41 @@ func ListStatement(c *gin.Context) {
 		panic(base.ParamsError(err.Error()))
 	}
 
-	var statement []earthworm.Statements
-	errFind := dao.GetConn().Table("statements").
-		Where("course_id = ?", vo.CourseId).
-		Where("pid = ?", "").
-		//Order("`order` desc").
-		Find(&statement).Error
-	if errFind != nil {
-		panic(base.ParamsError(errFind.Error()))
-	}
+	var statements []earthworm.Statements
+	statementMap := make(map[string][]earthworm.Statements)
+	if vo.StatementId == "statement" {
+		errFind := dao.GetConn().Table("statements").
+			Where("course_id = ?", vo.CourseId).
+			Where("pid <> ?", "").
+			//Order("`order` desc").
+			Find(&statements).Error
+		if errFind != nil {
+			panic(base.ParamsError(errFind.Error()))
+		}
+		for _, statement := range statements {
+			statementMap[statement.Pid] = append(statementMap[statement.Pid], statement)
+		}
 
-	if len(statement) > 0 {
-		c.JSON(http.StatusOK, base.Success(statement))
+		if len(statementMap) > 0 {
+			c.JSON(http.StatusOK, base.Success(statementMap))
+		} else {
+			c.JSON(http.StatusOK, base.Success(nil))
+		}
 	} else {
-		c.JSON(http.StatusOK, base.Success([]earthworm.Courses{}))
+		errFind := dao.GetConn().Table("statements").
+			Where("course_id = ?", vo.CourseId).
+			Where("pid = ?", "").
+			//Order("`order` desc").
+			Find(&statements).Error
+		if errFind != nil {
+			panic(base.ParamsError(errFind.Error()))
+		}
+
+		if len(statements) > 0 {
+			c.JSON(http.StatusOK, base.Success(statements))
+		} else {
+			c.JSON(http.StatusOK, base.Success([]earthworm.Courses{}))
+		}
 	}
 }
 
@@ -279,7 +298,7 @@ func SplitStatement(c *gin.Context) {
 		panic(base.ParamsError(err.Error()))
 	}
 
-	var sentences []earthworm.Statements
+	/*var sentences []earthworm.Statements
 	if len(vo.StatementIds) == 0 {
 		// todo 查出该课程所有句子
 		errFind := dao.GetConn().Table("statements").
@@ -311,6 +330,7 @@ func SplitStatement(c *gin.Context) {
 		sentencesSlice = append(sentencesSlice, sentences[i].English+".")
 	}
 	sentencesStr := strings.Join(sentencesSlice, "")
+	//sentencesStr = sentencesStr + "Come here and learn English quickly."
 
 	content := "请注意，我将给你发送一些英文句子，你需要将英文句子拆分成单词和短语句子，按照以下顺序拆分：" +
 		"1. 拆分出句子中第一个短句里的每个单词。" +
@@ -362,7 +382,7 @@ func SplitStatement(c *gin.Context) {
 		Model: "deepseek-chat",
 		Messages: []Message{
 			{Role: "system", Content: content},
-			{Role: "user", Content: "Hello!"},
+			//{Role: "user", Content: "Hello!"},
 		},
 		Stream: false,
 	}
@@ -375,9 +395,9 @@ func SplitStatement(c *gin.Context) {
 	}
 	fmt.Println("POST response:", deepSeekChatCompletionsResponse)
 
-	responseContent := deepSeekChatCompletionsResponse.Choices[0].Message.Content
+	responseContent := deepSeekChatCompletionsResponse.Choices[0].Message.Content*/
 
-	//responseString := "```json\n[\n    {\n        \"sentence\": \"it is not important so i don't need to do it today.\",\n        \"statements\": [\n            {\n                \"chinese\": \"它\",\n                \"english\": \"it\",\n                \"order\": 1,\n                \"soundmark\": \"/ɪt/\"\n            },\n            {\n                \"chinese\": \"是\",\n                \"english\": \"is\",\n                \"order\": 2,\n                \"soundmark\": \"/ɪz/\"\n            },\n            {\n                \"chinese\": \"它是不\",\n                \"english\": \"it is\",\n                \"order\": 3,\n                \"soundmark\": \"/ɪt ɪz/\"\n            },\n            {\n                \"chinese\": \"不\",\n                \"english\": \"not\",\n                \"order\": 4,\n                \"soundmark\": \"/nɒt/\"\n            },\n            {\n                \"chinese\": \"重要\",\n                \"english\": \"important\",\n                \"order\": 5,\n                \"soundmark\": \"/ɪmˈpɔːrtnt/\"\n            },\n            {\n                \"chinese\": \"不重要\",\n                \"english\": \"not important\",\n                \"order\": 6,\n                \"soundmark\": \"/nɒt ɪmˈpɔːrtnt/\"\n            },\n            {\n                \"chinese\": \"它是不重要的\",\n                \"english\": \"it is not important\",\n                \"order\": 7,\n                \"soundmark\": \"/ɪt ɪz nɒt ɪmˈpɔːrtnt/\"\n            },\n            {\n                \"chinese\": \"所以\",\n                \"english\": \"so\",\n                \"order\": 8,\n                \"soundmark\": \"/səʊ/\"\n            },\n            {\n                \"chinese\": \"我\",\n                \"english\": \"i\",\n                \"order\": 9,\n                \"soundmark\": \"/aɪ/\"\n            },\n            {\n                \"chinese\": \"所以我\",\n                \"english\": \"so i\",\n                \"order\": 10,\n                \"soundmark\": \"/səʊ aɪ/\"\n            },\n            {\n                \"chinese\": \"不需要\",\n                \"english\": \"don’t need\",\n                \"order\": 11,\n                \"soundmark\": \"/dəʊnt niːd/\"\n            },\n            {\n                \"chinese\": \"做\",\n                \"english\": \"to do\",\n                \"order\": 12,\n                \"soundmark\": \"/tuː duː/\"\n            },\n            {\n                \"chinese\": \"它\",\n                \"english\": \"it\",\n                \"order\": 13,\n                \"soundmark\": \"/ɪt/\"\n            },\n            {\n                \"chinese\": \"今天\",\n                \"english\": \"today\",\n                \"order\": 14,\n                \"soundmark\": \"/təˈdeɪ/\"\n            },\n            {\n                \"chinese\": \"它是不重要的所以我今天不需要做它\",\n                \"english\": \"it is not important so i don't need to do it today\",\n                \"order\": 15,\n                \"soundmark\": \"/ɪt ɪz nɒt ɪmˈpɔːrtnt səʊ aɪ dəʊnt niːd tuː duː ɪt təˈdeɪ/\"\n            }\n        ]\n    },\n    {\n        \"sentence\": \"i like to play football on sunday with lucy.\",\n        \"statements\": [\n            {\n                \"chinese\": \"我\",\n                \"english\": \"i\",\n                \"order\": 1,\n                \"soundmark\": \"/aɪ/\"\n            },\n            {\n                \"chinese\": \"喜欢\",\n                \"english\": \"like\",\n                \"order\": 2,\n                \"soundmark\": \"/laɪk/\"\n            },\n            {\n                \"chinese\": \"我喜欢\",\n                \"english\": \"i like\",\n                \"order\": 3,\n                \"soundmark\": \"/aɪ laɪk/\"\n            },\n            {\n                \"chinese\": \"去\",\n                \"english\": \"to\",\n                \"order\": 4,\n                \"soundmark\": \"/tuː/\"\n            },\n            {\n                \"chinese\": \"我喜欢去\",\n                \"english\": \"i like to\",\n                \"order\": 5,\n                \"soundmark\": \"/aɪ laɪk tuː/\"\n            },\n            {\n                \"chinese\": \"玩\",\n                \"english\": \"play\",\n                \"order\": 6,\n                \"soundmark\": \"/pleɪ/\"\n            },\n            {\n                \"chinese\": \"足球\",\n                \"english\": \"football\",\n                \"order\": 7,\n                \"soundmark\": \"/ˈfʊtbɔːl/\"\n            },\n            {\n                \"chinese\": \"玩足球\",\n                \"english\": \"play football\",\n                \"order\": 8,\n                \"soundmark\": \"/pleɪ ˈfʊtbɔːl/\"\n            },\n            {\n                \"chinese\": \"我喜欢去玩足球\",\n                \"english\": \"i like to play football\",\n                \"order\": 9,\n                \"soundmark\": \"/aɪ laɪk tuː pleɪ ˈfʊtbɔːl/\"\n            },\n            {\n                \"chinese\": \"在\",\n                \"english\": \"on\",\n                \"order\": 10,\n                \"soundmark\": \"/ɒn/\"\n            },\n            {\n                \"chinese\": \"星期天\",\n                \"english\": \"sunday\",\n                \"order\": 11,\n                \"soundmark\": \"/ˈsʌndeɪ/\"\n            },\n            {\n                \"chinese\": \"在星期天\",\n                \"english\": \"on sunday\",\n                \"order\": 12,\n                \"soundmark\": \"/ɒn ˈsʌndeɪ/\"\n            },\n            {\n                \"chinese\": \"我喜欢去玩足球在星期天\",\n                \"english\": \"i like to play football on sunday\",\n                \"order\": 13,\n                \"soundmark\": \"/aɪ laɪk tuː pleɪ ˈfʊtbɔːl ɒn ˈsʌndeɪ/\"\n            },\n            {\n                \"chinese\": \"和\",\n                \"english\": \"with\",\n                \"order\": 14,\n                \"soundmark\": \"/wɪð/\"\n            },\n            {\n                \"chinese\": \"露西\",\n                \"english\": \"lucy\",\n                \"order\": 15,\n                \"soundmark\": \"/ˈluːsi/\"\n            },\n            {\n                \"chinese\": \"和露西\",\n                \"english\": \"with lucy\",\n                \"order\": 16,\n                \"soundmark\": \"/wɪð ˈluːsi/\"\n            },\n            {\n                \"chinese\": \"我喜欢去玩足球在星期天和露西\",\n                \"english\": \"i like to play football on sunday with lucy\",\n                \"order\": 17,\n                \"soundmark\": \"/aɪ laɪk tuː pleɪ ˈfʊtbɔːl ɒn ˈsʌndeɪ wɪð ˈluːsi/\"\n            }\n        ]\n    }\n]\n```"
+	responseContent := "```json\n{\n  \"sentence\": \"This is a very useful tool.\",\n  \"statements\": [\n    {\n      \"chinese\": \"这\",\n      \"english\": \"This\",\n      \"order\": 1,\n      \"soundmark\": \"ðɪs\"\n    },\n    {\n      \"chinese\": \"是\",\n      \"english\": \"is\",\n      \"order\": 2,\n      \"soundmark\": \"ɪz\"\n    },\n    {\n      \"chinese\": \"这是一个\",\n      \"english\": \"This is\",\n      \"order\": 3,\n      \"soundmark\": \"ðɪs ɪz\"\n    },\n    {\n      \"chinese\": \"一个\",\n      \"english\": \"a\",\n      \"order\": 4,\n      \"soundmark\": \"ə\"\n    },\n    {\n      \"chinese\": \"这是一个非常\",\n      \"english\": \"This is a\",\n      \"order\": 5,\n      \"soundmark\": \"ðɪs ɪz ə\"\n    },\n    {\n      \"chinese\": \"非常\",\n      \"english\": \"very\",\n      \"order\": 6,\n      \"soundmark\": \"ˈvɛri\"\n    },\n    {\n      \"chinese\": \"这是一个非常有用的\",\n      \"english\": \"This is a very\",\n      \"order\": 7,\n      \"soundmark\": \"ðɪs ɪz ə ˈvɛri\"\n    },\n    {\n      \"chinese\": \"有用的\",\n      \"english\": \"useful\",\n      \"order\": 8,\n      \"soundmark\": \"ˈjusfəl\"\n    },\n    {\n      \"chinese\": \"这是一个非常有用的工具\",\n      \"english\": \"This is a very useful\",\n      \"order\": 9,\n      \"soundmark\": \"ðɪs ɪz ə ˈvɛri ˈjusfəl\"\n    },\n    {\n      \"chinese\": \"工具\",\n      \"english\": \"tool\",\n      \"order\": 10,\n      \"soundmark\": \"tul\"\n    },\n    {\n      \"chinese\": \"这是一个非常有用的工具\",\n      \"english\": \"This is a very useful tool\",\n      \"order\": 11,\n      \"soundmark\": \"ðɪs ɪz ə ˈvɛri ˈjusfəl tul\"\n    }\n  ]\n}\n```"
 
 	// 去掉 ```json 和 ``` 标记
 	jsonStringContent := strings.TrimPrefix(responseContent, "```json")
@@ -389,9 +409,18 @@ func SplitStatement(c *gin.Context) {
 
 	// 解析 JSON 数据
 	var sentenceDatas []SentenceData
-	errSentenceDatas := json.Unmarshal([]byte(jsonStringContent), &sentenceDatas)
-	if errSentenceDatas != nil {
-		panic("Error unmarshaling JSON: %v" + errSentenceDatas.Error())
+	if len(vo.StatementIds) == 0 {
+		errSentenceDatas := json.Unmarshal([]byte(jsonStringContent), &sentenceDatas)
+		if errSentenceDatas != nil {
+			panic("Error unmarshaling JSON: %v" + errSentenceDatas.Error())
+		}
+	} else {
+		var sentenceData SentenceData
+		errSentenceDatas := json.Unmarshal([]byte(jsonStringContent), &sentenceData)
+		if errSentenceDatas != nil {
+			panic("Error unmarshaling JSON: %v" + errSentenceDatas.Error())
+		}
+		sentenceDatas = append(sentenceDatas, sentenceData)
 	}
 
 	// 输出结果
@@ -423,6 +452,7 @@ func SplitStatement(c *gin.Context) {
 			fmt.Println("sentence exists")
 
 			// todo 插入短句
+			var statementCreates []earthworm.Statements
 			for _, statement := range statements {
 				var statementCreate earthworm.Statements
 				statementCreate.Id = base.GenerateUniqueTextID()
@@ -432,13 +462,13 @@ func SplitStatement(c *gin.Context) {
 				statementCreate.English = statement.English
 				statementCreate.Soundmark = statement.Soundmark
 				statementCreate.Order = statement.Order
-				errCreate := dao.GetConn().Table("statements").
-					Create(&statementCreate).Error
-				if errCreate != nil {
-					panic(base.ParamsErrorN())
-				}
+				statementCreates = append(statementCreates, statementCreate)
+			}
 
-				statementIds = append(statementIds, statementCreate.Id)
+			errCreate := dao.GetConn().Table("statements").
+				Create(&statementCreates).Error
+			if errCreate != nil {
+				panic(base.ParamsErrorN())
 			}
 		}
 	}
