@@ -3,12 +3,14 @@ package statements
 import (
 	"bytes"
 	"crf-mold/base"
+	restclient "crf-mold/common/http"
 	"crf-mold/dao"
 	"crf-mold/model/earthworm"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"io"
 	"net/http"
@@ -82,20 +84,54 @@ func DeleteStatement(c *gin.Context) {
 	}
 
 	var statement earthworm.Statements
-	if len(vo.StatementIds) == 0 {
+	if vo.Type == "batchDelete" { // todo 批量删除
 		errDelete := dao.GetConn().Table("statements").
 			Where("course_id = ?", vo.CourseId).
 			Delete(&statement).Error
 		if errDelete != nil {
 			panic(base.ParamsError(errDelete.Error()))
 		}
-	} else {
+	}
+
+	if vo.Type == "singleDelete" { // todo 单个删除
+		var statementFind []earthworm.Statements
+		errFind := dao.GetConn().Table("statements").
+			Where("course_id = ?", vo.CourseId).
+			Where("id in ?", vo.StatementIds).
+			Find(&statementFind).Error
+		if errFind != nil {
+			panic(base.ParamsError(errFind.Error()))
+		}
+		if len(statementFind) > 0 {
+			panic(base.ParamsError("该句子有子句，不允许删除"))
+		}
+
 		errDelete := dao.GetConn().Table("statements").
 			Where("course_id = ?", vo.CourseId).
 			Where("id in ?", vo.StatementIds).
 			Delete(&statement).Error
 		if errDelete != nil {
 			panic(base.ParamsError(errDelete.Error()))
+		}
+	}
+
+	if vo.Type == "clear" { // todo 清空
+		if len(vo.StatementIds) > 0 { // todo 清空单个句子的子句子
+			errDelete := dao.GetConn().Table("statements").
+				Where("course_id = ?", vo.CourseId).
+				Where("pid in ?", vo.StatementIds).
+				Delete(&statement).Error
+			if errDelete != nil {
+				panic(base.ParamsError(errDelete.Error()))
+			}
+		} else { // todo 清空所有
+			errDelete := dao.GetConn().Table("statements").
+				Where("course_id = ?", vo.CourseId).
+				Where("pid <> ?", "").
+				Delete(&statement).Error
+			if errDelete != nil {
+				panic(base.ParamsError(errDelete.Error()))
+			}
 		}
 	}
 
@@ -298,7 +334,7 @@ func SplitStatement(c *gin.Context) {
 		panic(base.ParamsError(err.Error()))
 	}
 
-	/*var sentences []earthworm.Statements
+	var sentences []earthworm.Statements
 	if len(vo.StatementIds) == 0 {
 		// todo 查出该课程所有句子
 		errFind := dao.GetConn().Table("statements").
@@ -310,6 +346,20 @@ func SplitStatement(c *gin.Context) {
 			panic(base.ParamsError(errFind.Error()))
 		}
 	} else {
+		var statements []earthworm.Statements
+		errFindStatement := dao.GetConn().Table("statements").
+			Where("course_id = ?", vo.CourseId).
+			Where("pid in ?", vo.StatementIds).
+			//Order("`order` desc").
+			Find(&statements).Error
+		if errFindStatement != nil {
+			panic(base.ParamsError(errFindStatement.Error()))
+		}
+
+		if len(statements) > 0 {
+			panic(base.ParamsError("句子里有内容，请清空再尝试"))
+		}
+
 		// todo 查出该句子
 		errFind := dao.GetConn().Table("statements").
 			Where("course_id = ?", vo.CourseId).
@@ -370,7 +420,7 @@ func SplitStatement(c *gin.Context) {
 	// todo 对接deepseek 对话 API
 	baseUrl := viper.GetString("deepSeekApi.baseUrl")
 	apiKey := viper.GetString("deepSeekApi.apiKey")
-	client := restclient.NewClient(baseUrl, 100)
+	client := restclient.NewClient(baseUrl, 1000)
 
 	endpoint := "/v1/chat/completions"
 	headers := make(map[string]string)
@@ -395,9 +445,9 @@ func SplitStatement(c *gin.Context) {
 	}
 	fmt.Println("POST response:", deepSeekChatCompletionsResponse)
 
-	responseContent := deepSeekChatCompletionsResponse.Choices[0].Message.Content*/
+	responseContent := deepSeekChatCompletionsResponse.Choices[0].Message.Content
 
-	responseContent := "```json\n{\n  \"sentence\": \"This is a very useful tool.\",\n  \"statements\": [\n    {\n      \"chinese\": \"这\",\n      \"english\": \"This\",\n      \"order\": 1,\n      \"soundmark\": \"ðɪs\"\n    },\n    {\n      \"chinese\": \"是\",\n      \"english\": \"is\",\n      \"order\": 2,\n      \"soundmark\": \"ɪz\"\n    },\n    {\n      \"chinese\": \"这是一个\",\n      \"english\": \"This is\",\n      \"order\": 3,\n      \"soundmark\": \"ðɪs ɪz\"\n    },\n    {\n      \"chinese\": \"一个\",\n      \"english\": \"a\",\n      \"order\": 4,\n      \"soundmark\": \"ə\"\n    },\n    {\n      \"chinese\": \"这是一个非常\",\n      \"english\": \"This is a\",\n      \"order\": 5,\n      \"soundmark\": \"ðɪs ɪz ə\"\n    },\n    {\n      \"chinese\": \"非常\",\n      \"english\": \"very\",\n      \"order\": 6,\n      \"soundmark\": \"ˈvɛri\"\n    },\n    {\n      \"chinese\": \"这是一个非常有用的\",\n      \"english\": \"This is a very\",\n      \"order\": 7,\n      \"soundmark\": \"ðɪs ɪz ə ˈvɛri\"\n    },\n    {\n      \"chinese\": \"有用的\",\n      \"english\": \"useful\",\n      \"order\": 8,\n      \"soundmark\": \"ˈjusfəl\"\n    },\n    {\n      \"chinese\": \"这是一个非常有用的工具\",\n      \"english\": \"This is a very useful\",\n      \"order\": 9,\n      \"soundmark\": \"ðɪs ɪz ə ˈvɛri ˈjusfəl\"\n    },\n    {\n      \"chinese\": \"工具\",\n      \"english\": \"tool\",\n      \"order\": 10,\n      \"soundmark\": \"tul\"\n    },\n    {\n      \"chinese\": \"这是一个非常有用的工具\",\n      \"english\": \"This is a very useful tool\",\n      \"order\": 11,\n      \"soundmark\": \"ðɪs ɪz ə ˈvɛri ˈjusfəl tul\"\n    }\n  ]\n}\n```"
+	//responseContent := "```json\n{\n  \"sentence\": \"This is a very useful tool.\",\n  \"statements\": [\n    {\n      \"chinese\": \"这\",\n      \"english\": \"This\",\n      \"order\": 1,\n      \"soundmark\": \"ðɪs\"\n    },\n    {\n      \"chinese\": \"是\",\n      \"english\": \"is\",\n      \"order\": 2,\n      \"soundmark\": \"ɪz\"\n    },\n    {\n      \"chinese\": \"这是一个\",\n      \"english\": \"This is\",\n      \"order\": 3,\n      \"soundmark\": \"ðɪs ɪz\"\n    },\n    {\n      \"chinese\": \"一个\",\n      \"english\": \"a\",\n      \"order\": 4,\n      \"soundmark\": \"ə\"\n    },\n    {\n      \"chinese\": \"这是一个非常\",\n      \"english\": \"This is a\",\n      \"order\": 5,\n      \"soundmark\": \"ðɪs ɪz ə\"\n    },\n    {\n      \"chinese\": \"非常\",\n      \"english\": \"very\",\n      \"order\": 6,\n      \"soundmark\": \"ˈvɛri\"\n    },\n    {\n      \"chinese\": \"这是一个非常有用的\",\n      \"english\": \"This is a very\",\n      \"order\": 7,\n      \"soundmark\": \"ðɪs ɪz ə ˈvɛri\"\n    },\n    {\n      \"chinese\": \"有用的\",\n      \"english\": \"useful\",\n      \"order\": 8,\n      \"soundmark\": \"ˈjusfəl\"\n    },\n    {\n      \"chinese\": \"这是一个非常有用的工具\",\n      \"english\": \"This is a very useful\",\n      \"order\": 9,\n      \"soundmark\": \"ðɪs ɪz ə ˈvɛri ˈjusfəl\"\n    },\n    {\n      \"chinese\": \"工具\",\n      \"english\": \"tool\",\n      \"order\": 10,\n      \"soundmark\": \"tul\"\n    },\n    {\n      \"chinese\": \"这是一个非常有用的工具\",\n      \"english\": \"This is a very useful tool\",\n      \"order\": 11,\n      \"soundmark\": \"ðɪs ɪz ə ˈvɛri ˈjusfəl tul\"\n    }\n  ]\n}\n```"
 
 	// 去掉 ```json 和 ``` 标记
 	jsonStringContent := strings.TrimPrefix(responseContent, "```json")
@@ -409,16 +459,12 @@ func SplitStatement(c *gin.Context) {
 
 	// 解析 JSON 数据
 	var sentenceDatas []SentenceData
-	if len(vo.StatementIds) == 0 {
-		errSentenceDatas := json.Unmarshal([]byte(jsonStringContent), &sentenceDatas)
-		if errSentenceDatas != nil {
-			panic("Error unmarshaling JSON: %v" + errSentenceDatas.Error())
-		}
-	} else {
+	errSentenceDatas := json.Unmarshal([]byte(jsonStringContent), &sentenceDatas)
+	if errSentenceDatas != nil {
 		var sentenceData SentenceData
-		errSentenceDatas := json.Unmarshal([]byte(jsonStringContent), &sentenceData)
-		if errSentenceDatas != nil {
-			panic("Error unmarshaling JSON: %v" + errSentenceDatas.Error())
+		errSentenceData := json.Unmarshal([]byte(jsonStringContent), &sentenceData)
+		if errSentenceData != nil {
+			panic("Error unmarshaling JSON: %v" + errSentenceData.Error())
 		}
 		sentenceDatas = append(sentenceDatas, sentenceData)
 	}
