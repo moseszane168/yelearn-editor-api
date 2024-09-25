@@ -94,24 +94,36 @@ func DeleteStatement(c *gin.Context) {
 	}
 
 	if vo.Type == "singleDelete" { // todo 单个删除
-		var statementFind []earthworm.Statements
-		errFind := dao.GetConn().Table("statements").
-			Where("course_id = ?", vo.CourseId).
-			Where("id in ?", vo.StatementIds).
-			Find(&statementFind).Error
-		if errFind != nil {
-			panic(base.ParamsError(errFind.Error()))
-		}
-		if len(statementFind) > 0 {
-			panic(base.ParamsError("该句子有子句，不允许删除"))
+		if vo.SentenceType == "sentence" { // todo 删除单个句子
+			var statementFind []earthworm.Statements
+			errFind := dao.GetConn().Table("statements").
+				Where("course_id = ?", vo.CourseId).
+				Where("pid in ?", vo.StatementIds).
+				Find(&statementFind).Error
+			if errFind != nil {
+				panic(base.ParamsError(errFind.Error()))
+			}
+			if len(statementFind) > 0 {
+				panic(base.ParamsError("该句子有子句，不允许删除"))
+			}
+
+			errDelete := dao.GetConn().Table("statements").
+				Where("course_id = ?", vo.CourseId).
+				Where("id in ?", vo.StatementIds).
+				Delete(&statement).Error
+			if errDelete != nil {
+				panic(base.ParamsError(errDelete.Error()))
+			}
 		}
 
-		errDelete := dao.GetConn().Table("statements").
-			Where("course_id = ?", vo.CourseId).
-			Where("id in ?", vo.StatementIds).
-			Delete(&statement).Error
-		if errDelete != nil {
-			panic(base.ParamsError(errDelete.Error()))
+		if vo.SentenceType == "statement" { // todo 删除单个子句
+			errDelete := dao.GetConn().Table("statements").
+				Where("course_id = ?", vo.CourseId).
+				Where("id in ?", vo.StatementIds).
+				Delete(&statement).Error
+			if errDelete != nil {
+				panic(base.ParamsError(errDelete.Error()))
+			}
 		}
 	}
 

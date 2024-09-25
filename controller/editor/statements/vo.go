@@ -85,8 +85,9 @@ type SplitStatementVO struct {
 type DeleteStatementVO struct {
 	CourseId string `json:"courseId" binding:"required"` // 课程id
 	//Statement string `json:"statement" binding:"required"` // 句子
-	StatementIds []string `json:"statementIds"`            // 句子ids
-	Type         string   `json:"type" binding:"required"` // 类型
+	StatementIds []string `json:"statementIds"`                    // 句子ids
+	Type         string   `json:"type" binding:"required"`         // 删除类型 singleDelete-单个删除 batchDelete-批量删除 清空-clear
+	SentenceType string   `json:"sentenceType" binding:"required"` // 单个删除类型 sentence-删除单个句子 statement-删除单个子句
 } // @name DeleteStatementVO
 
 type DeepSeekRequest struct {
