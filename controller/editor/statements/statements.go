@@ -346,8 +346,9 @@ func SplitStatement(c *gin.Context) {
 		panic(base.ParamsError(err.Error()))
 	}
 
-	var sentences []earthworm.Statements
+	var canSentences []earthworm.Statements
 	if len(vo.StatementIds) == 0 {
+		var sentences []earthworm.Statements
 		// todo 查出该课程所有句子
 		errFind := dao.GetConn().Table("statements").
 			Where("course_id = ?", vo.CourseId).
@@ -356,6 +357,24 @@ func SplitStatement(c *gin.Context) {
 			Find(&sentences).Error
 		if errFind != nil {
 			panic(base.ParamsError(errFind.Error()))
+		}
+
+		if len(sentences) > 0 {
+			for _, sentence := range sentences {
+				var statements []earthworm.Statements
+				errFindStatement := dao.GetConn().Table("statements").
+					Where("course_id = ?", vo.CourseId).
+					Where("pid = ?", sentence.Id).
+					//Order("`order` desc").
+					Find(&statements).Error
+				if errFindStatement != nil {
+					//panic(base.ParamsError(errFindStatement.Error()))
+				}
+
+				if len(statements) == 0 {
+					canSentences = append(statements, sentence)
+				}
+			}
 		}
 	} else {
 		var statements []earthworm.Statements
@@ -377,19 +396,19 @@ func SplitStatement(c *gin.Context) {
 			Where("course_id = ?", vo.CourseId).
 			Where("id in ?", vo.StatementIds).
 			//Order("`order` desc").
-			Find(&sentences).Error
+			Find(&canSentences).Error
 		if errFind != nil {
 			panic(base.ParamsError(errFind.Error()))
 		}
 	}
 
-	if len(sentences) == 0 {
+	if len(canSentences) == 0 {
 		panic(base.ParamsError("请添加句子"))
 	}
 
 	var sentencesSlice []string
-	for i, _ := range sentences {
-		sentencesSlice = append(sentencesSlice, sentences[i].English+".")
+	for i, _ := range canSentences {
+		sentencesSlice = append(sentencesSlice, canSentences[i].English+".")
 	}
 	sentencesStr := strings.Join(sentencesSlice, "")
 	//sentencesStr = sentencesStr + "Come here and learn English quickly."
