@@ -267,13 +267,13 @@ func UploadCover(c *gin.Context) {
 	filename := fmt.Sprintf("%d%s", time.Now().UnixNano(), filepath.Ext(file.Filename))
 
 	// 保存上传的文件到本地
-	savePath := filepath.Join(".\\uploads", filename)
+	savePath := filepath.Join("./uploads", filename)
 	if err := c.SaveUploadedFile(file, savePath); err != nil {
 		panic(base.ParamsError(err.Error()))
 	}
 
 	// 返回文件访问路径
-	filePath := fmt.Sprintf("http://127.0.0.1:8081/uploads/%s", filename)
+	filePath := fmt.Sprintf("http://120.24.24.107:8081/uploads/%s", filename)
 
 	// 返回Key
 	c.JSON(http.StatusOK, base.Success(&FileOutVO{

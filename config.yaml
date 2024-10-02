@@ -10,7 +10,7 @@ mysql:
   password: root
   schema: crf_mold_prod
 postgresql:
-  host: localhost
+  host: 120.24.24.107
   port: 5433
   user: postgres
   password: password
