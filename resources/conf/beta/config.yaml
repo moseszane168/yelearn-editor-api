@@ -1,41 +1,21 @@
-appName: crf-mold
+appName: yelearn-editor
 env: beta
-# web服务端口
+# web服务端口,需要同步修改前端工程配置的后台服务地址或K8s的ingress规则
 server:
   port: 8081
-mysql:
-  host: 10.102.1.173
-  port: 3306
-  user: root
-  password: admin123456
-  schema: crf_mold
-sqlserver:
-  host: 10.102.1.63
-  port: 1433
-  user: db356320
-  password: FJg6Chy90CaOMpbL
-  schema: ASRS
+postgresql:
+  host: 120.24.24.107
+  port: 5433
+  user: postgres
+  password: password
+  dbname: earthworm
 redis:
-  host: 10.102.1.173
+  host: 172.16.1.66
   port: 6379
-  password: admin123456
+  password: adminCRF123
   database: 0
   optimisation-max-idle: 100  # redis 连接池中的最大空闲连接数
   optimisation-max-active: 0 # 最大活跃连接数
-  enable-cluster: false # 是否开启集群模式
-plc:
-  # 小库
-  small:
-    tcpDevice: 172.16.70.20
-    rack: 0
-    slot: 1
-    db: 800
-  # 大库
-  big:
-    tcpDevice: 172.16.70.10
-    rack: 0
-    slot: 1
-    db: 800
 gorm:
   # 控制台打印SQL
   printSql: true
@@ -43,62 +23,6 @@ gorm:
   maxIdleConns: 10
   # 打开数据库连接的最大数量
   maxOpenConns: 100
-minio:
-  host: 10.102.1.173
-  port: 9000
-  accessKeyID: admin
-  secretAccessKey: admin123456
-es:
-  node: 
-  - http://10.102.1.173:9200
-  index: crf-mold-test
-mqtt:
-  broker: 10.109.1.212
-  port: 1883
-  userName: admin
-  password: public
-  subscribeTopic: mda/Stamping/+/shift/report
-  publishTopic: mda/Stamping/%s/shift/report
-email:
-  # 邮箱服务器
-  host: 10.196.131.201
-  # 端口
-  port: 25
-  userName: no-reply@smtp.keiper.com
-  passWord: 
-secret:
-  publicKey: |-
-   MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvrKWFpLztzPQ3UoKTt1Q
-   NAxfSoiqfqTefq0w92Jj9lYkVC6fQR2NBdQKsZeT6q8jAcEYWVnXHiGT3BRN+WLE
-   gMU52uSJSfdTulj9Nt3yYOtWzCmM2xGri14jhIa3IdnhfcX2XNoNB/fNgEeo0o+t
-   2+9yHSe9wW6RtPCBE8U46MGwTnFZtlBXikA66135ubyYtYd2LrPN7nPYEkNL8TtY
-   MbMTDmyzgUa5lOXypcbc+zd+QOgbIXtCkNvN17Nk9tFOB5yPN3toLNzOkmMhYREv
-   0dXndJ8klDynrPkkCfDxdIvq9RjPNoqTxhweCeXHDAekIn3lg54VC3CacQrPluSu
-   pwIDAQAB
-  privateKey: |-
-   MIIEuwIBADALBgkqhkiG9w0BAQEEggSnMIIEowIBAAKCAQEAvrKWFpLztzPQ3UoK
-   Tt1QNAxfSoiqfqTefq0w92Jj9lYkVC6fQR2NBdQKsZeT6q8jAcEYWVnXHiGT3BRN
-   +WLEgMU52uSJSfdTulj9Nt3yYOtWzCmM2xGri14jhIa3IdnhfcX2XNoNB/fNgEeo
-   0o+t2+9yHSe9wW6RtPCBE8U46MGwTnFZtlBXikA66135ubyYtYd2LrPN7nPYEkNL
-   8TtYMbMTDmyzgUa5lOXypcbc+zd+QOgbIXtCkNvN17Nk9tFOB5yPN3toLNzOkmMh
-   YREv0dXndJ8klDynrPkkCfDxdIvq9RjPNoqTxhweCeXHDAekIn3lg54VC3CacQrP
-   luSupwIDAQABAoIBAHdNsRp0W2ctUqlvDd3jFa9KYj92GvxaVxx3a+AJPTK7F8VW
-   2alaPIT98KbEhvTXFxac4Ifd7fha129jgJjaEsfhG933BnEw+7/ktp4h4uaBtW7L
-   O+U+O81YWu4pfd7+udT/Ca9zd52ZiYaMznDVFNc5CXJ2D4A5lYzWvlpJE96BYj5V
-   u6SeSJCQtxv8Y4Ey7n/Er6HkjMwWCoWiaClpPzJeftJUibHxH063HLPvKGXZFGX5
-   9vF04xyfzuJQiLgbCTXrwwTaxYO+8UnS7esqlge4fkpzhYhFtTnyC3NSEgj91tJH
-   YeoeKFsbgPVdu3Evk4u0Gxdna0jEGnDqf4CZCcECgYEA3OpmD0edOioJrTqURy5G
-   qu1pKd+67QhmvtDITV7wKQfpnJEk/p4LEv2WfgEMkIouj14H3EJiuECexKlve0uq
-   w9wdofcpBCxCJkotmL/KSd6I6eALKa+XwK6YgtyEmrggixaicZfzpmNfaMAShOIZ
-   piSIQWQNgfIsBvoBZS+qDkcCgYEA3Pui4gWxVyNA7Sc0KBRm8IGAGQGXnYSzGotE
-   /+8JKk7YdYqaHiEY4+ZCja484nKWK+ZZ+Wg434TJTGzWaN/uNOY3H78yNttYRgnB
-   /QzkHVlp/IgiqyfOge86elH+7wCAh4wbJK+UDvaCRCifdiS9sTLKQsR/GBOyLwvw
-   KDTWrKECgYAw4XiFpv3mEckkWFLY0Sd3yKI9TrDIo9RAImg/nmMbYRHSv9bks8mV
-   gSDcbpT+ImUc+dxZYyL+y+WVdDwjluGJBtpTrSGZN8XHPSCLrNwwrhmzTgyKQ70b
-   OEaspeh9Z4Jj5DU7VzjlNxW0UtOGLZUpSuoPNfk7KH+PZ6AJaJuDHwKBgQCd3jsP
-   42c8zBefFInDNEgR+0HrG2MYCev1w5bIjBjtG6Sx3BGcAqMIdMAI/XfLgnbb59VR
-   Qu6WaANy0LIf/BHtwqWQzYNvAyY96symHeZ9PRplaU/zHB4AX0pUhm1sitxHeYUO
-   oUxRoDORw7+fpEHL7G/oYP420iNSTuIDpzPR4QKBgHUAONjv7DGVy5QbMKWdpkMk
-   9v/KcvtEhpfJSiSJYkK7Kbjnb5thAmK/b6LxU/jV8hf4qR9i5qsTLe4VE3LeHxmH
-   S7ra8PtGKRX4AZ/2i43+XZP3YqjSPPNR0LNLFY3HAmPYhFoWkLsLJl1Wzm6GteAk
-   3OgA0tYDb7foAq8RProS
+deepSeekApi:
+  baseUrl: https://api.deepseek.com
+  apiKey: sk-9bd5cfe9fee74692be8bac6c514a42eb
